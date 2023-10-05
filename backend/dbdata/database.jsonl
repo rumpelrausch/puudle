@@ -1,0 +1,2 @@
+{"type":"event","eventName":"Alice","subscriptions":[],"date":"2023","_id":"H7P9bzhWYlWcFo0d","createdAt":{"$$date":1696355344200},"updatedAt":{"$$date":1696355344200}}
+{"$$indexCreated":{"fieldName":"createdAt","unique":false,"sparse":false}}
