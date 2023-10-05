@@ -1,4 +1,5 @@
 const express = require("express");
+const serveStatic = require('serve-static')
 const routeLoader = require('./routing/routeLoader.js');
 const db = require('./services/db.js');
 const Event = require('./model/eventModel');
@@ -6,6 +7,7 @@ const Event = require('./model/eventModel');
 db.persistDays(30);
 
 const app = express();
+app.use(serveStatic('frontend/dist', { index: ['index.html'] }))
 routeLoader.load(app);
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
