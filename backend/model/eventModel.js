@@ -78,7 +78,7 @@ class EventModel {
                 newDoc[fieldName] = eventData[fieldName];
             }
         }
-        const numOfUpdated = await db.updateAsync({
+        const numUpdated = await db.updateAsync({
             type: this.#type,
             _id: eventData._id
         }, {
@@ -86,10 +86,10 @@ class EventModel {
             ...newDoc
         });
         db.sync();
-        if (numOfUpdated < 1) {
+        if (numUpdated < 1) {
             throw new BackendError('event was not updated', 400);
         }
-        return numOfUpdated;
+        return numUpdated;
     }
 
     async delete(_id) {
