@@ -7,7 +7,8 @@ const Event = require('./model/eventModel');
 db.persistDays(30);
 
 const app = express();
-app.use(serveStatic('frontend/dist', { index: ['index.html'] }))
+app.use(serveStatic('frontend/dist'))
+app.use(express.json());
 routeLoader.load(app);
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
