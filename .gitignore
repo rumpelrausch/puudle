@@ -1,3 +1,6 @@
+# our database
+/backend/dbdata/database.jsonl
+
 # Logs
 logs
 *.log
