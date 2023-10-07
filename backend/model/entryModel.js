@@ -35,7 +35,6 @@ class EntryModel {
         let entryName = entryData.entryName;
         let date = entryData.date;
 
-        entryName = entryName.trim();
         this.validate('entryName', entryName);
         this.validate('date', date);
 

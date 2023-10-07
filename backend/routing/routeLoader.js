@@ -5,7 +5,8 @@ const invokeController = (controllerFunction, data, res, next) => {
   controllerFunction(data)
       .then((result) => res.send(result))
       .catch((error) => {
-          res.status(error.code);
+          const statusCode = error.code >=100 ? error.code : 500;
+          res.status(statusCode);
           res.send({ error: error.message });
           next();
       });
