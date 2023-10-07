@@ -1,5 +1,6 @@
 const express = require("express");
-const entryController = require('../../../../../controller/subscriptionController');
+const entryController = require('../../../../../controller/entryController');
+
 
 /**
  * @param {express.Application} app 
@@ -11,6 +12,9 @@ module.exports = (app, route, invokeController) => {
                 _id: req.params.entryId,
                 ...req.body
             };
-            invokeController(entryController.updateSubscription, entryData, res, next);
+            invokeController(entryController.updateEntry, entryData, res, next);
         })
+        .delete(async (req, res, next) => {
+            invokeController(entryController.deleteEntry, req.params.entryId, res, next);
+        });
 };
