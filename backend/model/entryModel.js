@@ -6,8 +6,7 @@ class EntryModel {
     #document;
     #allowedUpdateFields = [
         'entryName',
-        'date',
-        'subscriptions'
+        'date'
     ];
 
     validate(fieldName, fieldValue) {
