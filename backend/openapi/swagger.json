@@ -1,0 +1,1061 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Puudle calendar entries API",
+    "description": "Puudle...",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "/api/v0"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Entry",
+      "description": "Calendar entry"
+    },
+    {
+      "name": "Subscription",
+      "description": "User subscriptions to entries"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Entry": {
+        "type": "object",
+        "properties": {
+          "entryName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 100
+          },
+          "date": {
+            "type": "string",
+            "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+            "examples": [
+              "2023-12-31 17:00"
+            ]
+          }
+        }
+      },
+      "NewEntry": {
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "entryName": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 100
+              },
+              "date": {
+                "type": "string",
+                "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                "examples": [
+                  "2023-12-31 17:00"
+                ]
+              }
+            }
+          }
+        ],
+        "required": [
+          "entryName",
+          "date",
+          "time"
+        ]
+      },
+      "ExistingEntry": {
+        "readOnly": true,
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "entryId": {
+                "type": "integer"
+              },
+              "subscriptions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "userName": {
+                          "type": "string",
+                          "readOnly": true
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "state": {
+                          "type": "string",
+                          "enum": [
+                            "suggested",
+                            "accepted",
+                            "rejected",
+                            "maybe"
+                          ]
+                        },
+                        "comment": {
+                          "type": "string",
+                          "maxLength": 100
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entryName": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 100
+              },
+              "date": {
+                "type": "string",
+                "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                "examples": [
+                  "2023-12-31 17:00"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "UpdatedEntry": {
+        "allOf": [
+          {
+            "required": [],
+            "minProperties": 1,
+            "type": "object",
+            "allOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "entryName": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 100
+                  },
+                  "date": {
+                    "type": "string",
+                    "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                    "examples": [
+                      "2023-12-31 17:00"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "Subscription": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "suggested",
+              "accepted",
+              "rejected",
+              "maybe"
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 100
+          }
+        }
+      },
+      "NewSubscription": {
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "userName": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 30
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "string",
+                "enum": [
+                  "suggested",
+                  "accepted",
+                  "rejected",
+                  "maybe"
+                ]
+              },
+              "comment": {
+                "type": "string",
+                "maxLength": 100
+              }
+            }
+          }
+        ],
+        "required": [
+          "userName",
+          "state"
+        ]
+      },
+      "ExistingSubscription": {
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "userName": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "string",
+                "enum": [
+                  "suggested",
+                  "accepted",
+                  "rejected",
+                  "maybe"
+                ]
+              },
+              "comment": {
+                "type": "string",
+                "maxLength": 100
+              }
+            }
+          }
+        ]
+      },
+      "EntryList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "readOnly": true,
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "entryId": {
+                  "type": "integer"
+                },
+                "subscriptions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "userName": {
+                            "type": "string",
+                            "readOnly": true
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "state": {
+                            "type": "string",
+                            "enum": [
+                              "suggested",
+                              "accepted",
+                              "rejected",
+                              "maybe"
+                            ]
+                          },
+                          "comment": {
+                            "type": "string",
+                            "maxLength": 100
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "entryName": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 100
+                },
+                "date": {
+                  "type": "string",
+                  "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                  "examples": [
+                    "2023-12-31 17:00"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "paths": {
+    "/entry": {
+      "get": {
+        "tags": [
+          "Entry"
+        ],
+        "summary": "Get all entries",
+        "operationId": "getEntryList",
+        "responses": {
+          "200": {
+            "description": "Entry list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "readOnly": true,
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "entryId": {
+                            "type": "integer"
+                          },
+                          "subscriptions": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "userName": {
+                                      "type": "string",
+                                      "readOnly": true
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "state": {
+                                      "type": "string",
+                                      "enum": [
+                                        "suggested",
+                                        "accepted",
+                                        "rejected",
+                                        "maybe"
+                                      ]
+                                    },
+                                    "comment": {
+                                      "type": "string",
+                                      "maxLength": 100
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "entryName": {
+                            "type": "string",
+                            "minLength": 3,
+                            "maxLength": 100
+                          },
+                          "date": {
+                            "type": "string",
+                            "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                            "examples": [
+                              "2023-12-31 17:00"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Entry"
+        ],
+        "summary": "Add a new entry",
+        "operationId": "createEntry",
+        "requestBody": {
+          "description": "Entry values",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "entryName": {
+                        "type": "string",
+                        "minLength": 3,
+                        "maxLength": 100
+                      },
+                      "date": {
+                        "type": "string",
+                        "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                        "examples": [
+                          "2023-12-31 17:00"
+                        ]
+                      }
+                    }
+                  }
+                ],
+                "required": [
+                  "entryName",
+                  "date",
+                  "time"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Entry was created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "readOnly": true,
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entryId": {
+                          "type": "integer"
+                        },
+                        "subscriptions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "userName": {
+                                    "type": "string",
+                                    "readOnly": true
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "state": {
+                                    "type": "string",
+                                    "enum": [
+                                      "suggested",
+                                      "accepted",
+                                      "rejected",
+                                      "maybe"
+                                    ]
+                                  },
+                                  "comment": {
+                                    "type": "string",
+                                    "maxLength": 100
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entryName": {
+                          "type": "string",
+                          "minLength": 3,
+                          "maxLength": 100
+                        },
+                        "date": {
+                          "type": "string",
+                          "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                          "examples": [
+                            "2023-12-31 17:00"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/entry/{entryId}": {
+      "patch": {
+        "tags": [
+          "Entry"
+        ],
+        "summary": "Update an entry",
+        "operationId": "changeEntry",
+        "parameters": [
+          {
+            "name": "entryId",
+            "in": "path",
+            "description": "Entry ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Entry values, at least one must be set",
+          "content": {
+            "application/json": {
+              "schema": {
+                "minProperties": 1,
+                "allOf": [
+                  {
+                    "required": [],
+                    "minProperties": 1,
+                    "type": "object",
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "entryName": {
+                            "type": "string",
+                            "minLength": 3,
+                            "maxLength": 100
+                          },
+                          "date": {
+                            "type": "string",
+                            "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                            "examples": [
+                              "2023-12-31 17:00"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Entry was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "readOnly": true,
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entryId": {
+                          "type": "integer"
+                        },
+                        "subscriptions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "userName": {
+                                    "type": "string",
+                                    "readOnly": true
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "state": {
+                                    "type": "string",
+                                    "enum": [
+                                      "suggested",
+                                      "accepted",
+                                      "rejected",
+                                      "maybe"
+                                    ]
+                                  },
+                                  "comment": {
+                                    "type": "string",
+                                    "maxLength": 100
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entryName": {
+                          "type": "string",
+                          "minLength": 3,
+                          "maxLength": 100
+                        },
+                        "date": {
+                          "type": "string",
+                          "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                          "examples": [
+                            "2023-12-31 17:00"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entry not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Entry"
+        ],
+        "summary": "Delete an entry",
+        "operationId": "deleteEntry",
+        "parameters": [
+          {
+            "name": "entryId",
+            "in": "path",
+            "description": "Entry ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Entry was deleted"
+          },
+          "404": {
+            "description": "Entry not found"
+          }
+        }
+      }
+    },
+    "/entry/{entryId}/subscription/{userName}": {
+      "patch": {
+        "tags": [
+          "Subscription"
+        ],
+        "summary": "Update an entry subscription",
+        "operationId": "changeSubscription",
+        "parameters": [
+          {
+            "name": "entryId",
+            "in": "path",
+            "description": "Entry ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userName",
+            "in": "path",
+            "description": "Username",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Subscription values, at least one must be set",
+          "content": {
+            "application/json": {
+              "schema": {
+                "minProperties": 1,
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "suggested",
+                      "accepted",
+                      "rejected",
+                      "maybe"
+                    ]
+                  },
+                  "comment": {
+                    "type": "string",
+                    "maxLength": 100
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Entry was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "readOnly": true,
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entryId": {
+                          "type": "integer"
+                        },
+                        "subscriptions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "userName": {
+                                    "type": "string",
+                                    "readOnly": true
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "state": {
+                                    "type": "string",
+                                    "enum": [
+                                      "suggested",
+                                      "accepted",
+                                      "rejected",
+                                      "maybe"
+                                    ]
+                                  },
+                                  "comment": {
+                                    "type": "string",
+                                    "maxLength": 100
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entryName": {
+                          "type": "string",
+                          "minLength": 3,
+                          "maxLength": 100
+                        },
+                        "date": {
+                          "type": "string",
+                          "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                          "examples": [
+                            "2023-12-31 17:00"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entry or subscription not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Subscription"
+        ],
+        "summary": "Delete a subscription",
+        "operationId": "deleteSubscription",
+        "parameters": [
+          {
+            "name": "entryId",
+            "in": "path",
+            "description": "Entry ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userName",
+            "in": "path",
+            "description": "Username",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription was deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "readOnly": true,
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entryId": {
+                          "type": "integer"
+                        },
+                        "subscriptions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "userName": {
+                                    "type": "string",
+                                    "readOnly": true
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "state": {
+                                    "type": "string",
+                                    "enum": [
+                                      "suggested",
+                                      "accepted",
+                                      "rejected",
+                                      "maybe"
+                                    ]
+                                  },
+                                  "comment": {
+                                    "type": "string",
+                                    "maxLength": 100
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entryName": {
+                          "type": "string",
+                          "minLength": 3,
+                          "maxLength": 100
+                        },
+                        "date": {
+                          "type": "string",
+                          "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                          "examples": [
+                            "2023-12-31 17:00"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entry or subscription not found"
+          }
+        }
+      }
+    },
+    "/entry/{entryId}/subscription": {
+      "post": {
+        "tags": [
+          "Subscription"
+        ],
+        "summary": "Create a new subscription",
+        "operationId": "createSubscription",
+        "parameters": [
+          {
+            "name": "entrytId",
+            "in": "path",
+            "description": "Entry ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Subscription values, at least one must be set",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "userName": {
+                        "type": "string",
+                        "minLength": 3,
+                        "maxLength": 30
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "type": "string",
+                        "enum": [
+                          "suggested",
+                          "accepted",
+                          "rejected",
+                          "maybe"
+                        ]
+                      },
+                      "comment": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    }
+                  }
+                ],
+                "required": [
+                  "userName",
+                  "state"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Entry was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "readOnly": true,
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entryId": {
+                          "type": "integer"
+                        },
+                        "subscriptions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "userName": {
+                                    "type": "string",
+                                    "readOnly": true
+                                  }
+                                }
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "state": {
+                                    "type": "string",
+                                    "enum": [
+                                      "suggested",
+                                      "accepted",
+                                      "rejected",
+                                      "maybe"
+                                    ]
+                                  },
+                                  "comment": {
+                                    "type": "string",
+                                    "maxLength": 100
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "entryName": {
+                          "type": "string",
+                          "minLength": 3,
+                          "maxLength": 100
+                        },
+                        "date": {
+                          "type": "string",
+                          "pattern": "/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/",
+                          "examples": [
+                            "2023-12-31 17:00"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entry not found"
+          }
+        }
+      }
+    }
+  }
+}
