@@ -3,13 +3,13 @@ const fg = require('fast-glob');
 
 const invokeController = (controllerFunction, data, res, next) => {
   controllerFunction(data)
-      .then((result) => res.send(result))
-      .catch((error) => {
-          const statusCode = error.code >=100 ? error.code : 500;
-          res.status(statusCode);
-          res.send({ error: error.message });
-          next();
-      });
+    .then((result) => res.send(result))
+    .catch((error) => {
+      const statusCode = error.code >= 100 ? error.code : 500;
+      res.status(statusCode);
+      res.send({ error: error.message });
+      next();
+    });
 };
 
 const load = (app) => {

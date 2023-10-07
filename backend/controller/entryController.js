@@ -5,16 +5,18 @@ const getEntryList = async () => {
     return await entry.list();
 };
 
-const addEntry = async (body) => {
+const addEntry = async (entryData) => {
     const entry = new entryModel();
-    await entry.add(body);
+    await entry.add(entryData);
     return entry.document;
 };
 
-const updateEntry = async (body) => {
+const updateEntry = async (entryData) => {
     const entry = new entryModel();
-    const numUpdated = await entry.update(body);
-    return { numUpdated };
+    const updatedEntry = await entry.update(entryData);
+    return { 
+        updatedEntry
+     };
 };
 
 const getEntry = async (entryId) => {

@@ -6,7 +6,8 @@ class EntryModel {
     #document;
     #allowedUpdateFields = [
         'entryName',
-        'date'
+        'date',
+        'subscriptions'
     ];
 
     validate(fieldName, fieldValue) {
@@ -88,7 +89,7 @@ class EntryModel {
         if (numUpdated < 1) {
             throw new BackendError('entry was not updated', 400);
         }
-        return numUpdated;
+        return await this.get(entryData._id);
     }
 
     async delete(_id) {
@@ -102,6 +103,11 @@ class EntryModel {
 
     async exists(entryName, date) {
         const query = { type: this.#type, entryName, date };
+        return !!await db.findOneAsync(query);
+    }
+
+    async idExists(entryId) {
+        const query = { type: this.#type, _id: entryId };
         return !!await db.findOneAsync(query);
     }
 
