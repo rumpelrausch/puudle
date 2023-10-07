@@ -1,5 +1,5 @@
 const express = require("express");
-const eventController = require('../../../../controller/eventController');
+const entryController = require('../../../../controller/entryController');
 const { callController } = require('../../../routeController');
 
 /**
@@ -8,9 +8,9 @@ const { callController } = require('../../../routeController');
 module.exports = (app, route) => {
     app.route(route)
         .get(async (req, res, next) => {
-            callController(eventController.getEventList, undefined, res, next);
+            callController(entryController.getEntryList, undefined, res, next);
         })
         .post(async (req, res, next) => {
-            callController(eventController.addEvent, req.body, res, next);
+            callController(entryController.addEntry, req.body, res, next);
         }); 
 };

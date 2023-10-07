@@ -1,21 +1,21 @@
 const db = require('../services/db.js');
 const BackendError = require('../util/backendError');
 
-class EventModel {
-    #type = 'event';
+class EntryModel {
+    #type = 'entry';
     #document;
     #allowedUpdateFields = [
-        'eventName',
+        'entryName',
         'date'
     ];
 
     validate(fieldName, fieldValue) {
-        if (fieldName === 'eventName') {
+        if (fieldName === 'entryName') {
             if (typeof fieldValue !== 'string') {
                 throw new BackendError(`${fieldName} must be a string`, 400);
             }
             if (fieldValue.trim().length < 3) {
-                throw new BackendError('eventName must contain at least 3 characters', 400);
+                throw new BackendError('entryName must contain at least 3 characters', 400);
             }
             return;
         }
@@ -31,16 +31,16 @@ class EventModel {
         }
     }
 
-    async validateNewEvent(eventData) {
-        let eventName = eventData.eventName;
-        let date = eventData.date;
+    async validateNewEntry(entryData) {
+        let entryName = entryData.entryName;
+        let date = entryData.date;
 
-        eventName = eventName.trim();
-        this.validate('eventName', eventName);
+        entryName = entryName.trim();
+        this.validate('entryName', entryName);
         this.validate('date', date);
 
-        if (await this.exists(eventName, date)) {
-            throw new BackendError('event already exists', 409);
+        if (await this.exists(entryName, date)) {
+            throw new BackendError('entry already exists', 409);
         }
     };
 
@@ -49,45 +49,45 @@ class EventModel {
         const document = await db.findOneAsync(query);
         this.#document = document;
         if (!document) {
-            throw new BackendError('event does not exist', 404);
+            throw new BackendError('entry does not exist', 404);
         }
         return document;
     }
 
-    async add(eventData) {
-        await this.validateNewEvent(eventData);
-        const eventName = eventData.eventName;
-        const date = eventData.date;
+    async add(entryData) {
+        await this.validateNewEntry(entryData);
+        const entryName = entryData.entryName;
+        const date = entryData.date;
 
         this.#document = await db.insertAsync({
             type: this.#type,
-            eventName,
+            entryName,
             subscriptions: [],
             date
         });
         db.sync();
     }
 
-    async update(eventData) {
-        const existingDoc = await this.get(eventData._id);
+    async update(entryData) {
+        const existingDoc = await this.get(entryData._id);
         const newDoc = {};
 
         for (const fieldName of this.#allowedUpdateFields) {
-            if (typeof eventData[fieldName] !== 'undefined') {
-                this.validate(fieldName, eventData[fieldName]);
-                newDoc[fieldName] = eventData[fieldName];
+            if (typeof entryData[fieldName] !== 'undefined') {
+                this.validate(fieldName, entryData[fieldName]);
+                newDoc[fieldName] = entryData[fieldName];
             }
         }
         const numUpdated = await db.updateAsync({
             type: this.#type,
-            _id: eventData._id
+            _id: entryData._id
         }, {
             ...existingDoc,
             ...newDoc
         });
         db.sync();
         if (numUpdated < 1) {
-            throw new BackendError('event was not updated', 400);
+            throw new BackendError('entry was not updated', 400);
         }
         return numUpdated;
     }
@@ -96,13 +96,13 @@ class EventModel {
         const numRemoved = await db.removeAsync({ _id });
         db.sync();
         if (numRemoved < 1) {
-            throw new BackendError('event does not exist', 404);
+            throw new BackendError('entry does not exist', 404);
         }
         return numRemoved;
     }
 
-    async exists(eventName, date) {
-        const query = { type: this.#type, eventName, date };
+    async exists(entryName, date) {
+        const query = { type: this.#type, entryName, date };
         return !!await db.findOneAsync(query);
     }
 
@@ -115,4 +115,4 @@ class EventModel {
     get document() { return this.#document; }
 }
 
-module.exports = EventModel;
+module.exports = EntryModel;
