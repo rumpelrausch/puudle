@@ -85,8 +85,8 @@ class subscriptionModel {
             throw new BackendError(`subscription already exists`, 409);
         }
         entryData.subscriptions.push(newSubscription);
-        const numUpdated = await this.#entry.update(entryData);
-        return { numUpdated };
+        await this.#entry.update(entryData, true);
+        return await this.#entry.get(subscriptionData.entryId);
     }
 
     async update(subscriptionData) {

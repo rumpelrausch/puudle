@@ -6,7 +6,8 @@ class EntryModel {
     #document;
     #allowedUpdateFields = [
         'entryName',
-        'date'
+        'date',
+        'subscriptions'
     ];
 
     validate(fieldName, fieldValue) {
@@ -67,11 +68,14 @@ class EntryModel {
         db.sync();
     }
 
-    async update(entryData) {
+    async update(entryData, allowSubscriptionUpdate = false) {
         const existingDoc = await this.get(entryData._id);
         const newDoc = {};
 
         for (const fieldName of this.#allowedUpdateFields) {
+            if(!allowSubscriptionUpdate && fieldName === 'subscriptions') {
+                continue;
+            }
             if (typeof entryData[fieldName] !== 'undefined') {
                 this.validate(fieldName, entryData[fieldName]);
                 newDoc[fieldName] = entryData[fieldName];
