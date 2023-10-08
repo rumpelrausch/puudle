@@ -2,6 +2,9 @@ const db = require('../services/db.js');
 const entryModel = require('../model/entryModel');
 const BackendError = require('../util/backendError');
 
+const MIN_USERNAME_LENGTH = 2;
+const MAX_COMMENT_LENGTH = 100;
+
 class subscriptionModel {
     #entry;
 
@@ -32,8 +35,8 @@ class subscriptionModel {
     validate(fieldName, fieldValue) {
         if (fieldName === 'userName') {
             const userName = this.trimField(fieldName, fieldValue);
-            if (userName.length < 2) {
-                throw new BackendError('userName must contain at least 2 characters', 400);
+            if (userName.length < MIN_USERNAME_LENGTH) {
+                throw new BackendError(`userName must contain at least ${MIN_USERNAME_LENGTH} characters`, 400);
             }
             return userName;
         }
@@ -48,8 +51,8 @@ class subscriptionModel {
 
         if (fieldName === 'comment') {
             const comment = this.trimField(fieldName, fieldValue);
-            if (comment.length > 100) {
-                throw new BackendError('comment must not be longer that 100 characters', 400);
+            if (comment.length > MAX_COMMENT_LENGTH) {
+                throw new BackendError(`comment must not be longer that ${MAX_COMMENT_LENGTH} characters`, 400);
             }
             return comment;
         }

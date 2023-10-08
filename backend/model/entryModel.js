@@ -1,6 +1,8 @@
 const db = require('../services/db.js');
 const BackendError = require('../util/backendError');
 
+const MIN_ENTRYNAME_LENGTH = 3;
+
 class EntryModel {
     #type = 'entry';
     #document;
@@ -15,8 +17,8 @@ class EntryModel {
             if (typeof fieldValue !== 'string') {
                 throw new BackendError(`${fieldName} must be a string`, 400);
             }
-            if (fieldValue.trim().length < 3) {
-                throw new BackendError('entryName must contain at least 3 characters', 400);
+            if (fieldValue.trim().length < MIN_ENTRYNAME_LENGTH) {
+                throw new BackendError(`entryName must contain at least ${MIN_ENTRYNAME_LENGTH} characters`, 400);
             }
             return;
         }
@@ -26,7 +28,7 @@ class EntryModel {
                 throw new BackendError(`${fieldName} must be a string`, 400);
             }
             if (!fieldValue.match(/([0-9]{4})-(?:[0-9]{2})-([0-9]{2}) (0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/)) {
-                throw new BackendError("that's not a valid date", 400);
+                throw new BackendError('date must be "YYYY-MM-DD hh:mm"', 400);
             }
             return;
         }
