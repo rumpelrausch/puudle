@@ -4,9 +4,9 @@
   "description": "Puudle...",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm install",
-    "start": "node backend/index.js 8080",
-    "serve": "nodemon backend/index.js 8080"
+    "prestart": "npm ci",
+    "start": "node backend/index.js",
+    "dev": "nodemon backend/index.js"
   },
   "keywords": [
     "swagger"
