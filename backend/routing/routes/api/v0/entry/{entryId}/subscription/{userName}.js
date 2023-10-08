@@ -6,14 +6,6 @@ const subscriptionController = require('../../../../../../../controller/subscrip
  */
 module.exports = (app, route, invokeController) => {
     app.route(route)
-        .post(async (req, res, next) => {
-            const subscriptionData = {
-                entryId: req.params.entryId,
-                userName: req.params.userName,
-                ...req.body
-            };
-            invokeController(subscriptionController.addSubscription, subscriptionData, res, next);
-        })
         .patch(async (req, res, next) => {
             const subscriptionData = {
                 entryId: req.params.entryId,
