@@ -10,7 +10,7 @@ class subscriptionModel {
 
     #allowedStates = {
         suggested: 1,
-        accepted: 2,
+        confirmed: 2,
         rejected: 3,
         maybe: 4
     };
