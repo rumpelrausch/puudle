@@ -75,7 +75,7 @@ class EntryModel {
         const newDoc = {};
 
         for (const fieldName of this.#allowedUpdateFields) {
-            if(!allowSubscriptionUpdate && fieldName === 'subscriptions') {
+            if (!allowSubscriptionUpdate && fieldName === 'subscriptions') {
                 continue;
             }
             if (typeof entryData[fieldName] !== 'undefined') {

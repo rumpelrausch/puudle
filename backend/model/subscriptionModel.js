@@ -102,7 +102,7 @@ class subscriptionModel {
         }
         subscriptionList[subscriptionIndex] = newSubscription;
         entryData.subscriptions = subscriptionList;
-        await this.#entry.update(entryData);
+        await this.#entry.update(entryData, true);
         return await this.#entry.get(subscriptionData.entryId);
     }
 
