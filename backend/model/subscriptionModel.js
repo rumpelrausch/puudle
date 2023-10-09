@@ -113,9 +113,9 @@ class subscriptionModel {
         if (subscriptionIndex === false) {
             throw new BackendError(`subscription does not exist`, 400);
         }
-        delete subscriptionList[subscriptionIndex];
+        subscriptionList.splice(subscriptionIndex, 1);
         entryData.subscriptions = subscriptionList;
-        await this.#entry.update(entryData);
+        await this.#entry.update(entryData, true);
         return await this.#entry.get(subscriptionData.entryId);
     }
 }
