@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 const serveStatic = require('serve-static');
 const routeLoader = require('./routing/routeLoader.js');
 const db = require('./services/db.js');
@@ -6,6 +7,7 @@ const db = require('./services/db.js');
 db.persistDays(30);
 
 const app = express();
+app.use(cors());
 app.use(serveStatic('dist'));
 app.use(express.json());
 routeLoader.load(app);

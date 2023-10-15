@@ -116,9 +116,13 @@ class EntryModel {
         return !!await db.findOneAsync(query);
     }
 
-    async list() {
+    async list(withPastEntries = false) {
         db.sync();
-        const query = { type: this.#type };
+        let query = { type: this.#type };
+        if(!withPastEntries) {
+            const now = new Date();
+            query.date = { $gte: now.toISOString().split('T')[0] };
+        }
         return db.findAsync(query);
     }
 
