@@ -1,10 +1,27 @@
 <template>
+  <q-btn @click="store.add()">+</q-btn>
   <q-timeline layout="loose">
-    <q-timeline-entry v-for="(entry, key) in entries" :key="key" :title="entry.name"
-      :set="parsedDate = getParsedDate(entry.date)" :subtitle="`${parsedDate.dayDiffString}, ${parsedDate.prettyDate}`"
+    <q-timeline-entry v-for="(entry, key) in store.entries" :key="entry._id" :title="entry.entryName"
       :side="key % 2 === 0 ? 'left' : 'right'">
-      <div class="q-mb-xl">
-        blah
+      <div class="q-mb-xl" :set="parsedDate = getParsedDate(entry.date)">
+        {{ parsedDate.prettyDate }} - {{ parsedDate.dayDiffString }}
+        <div>
+          <q-markup-table wrap-cells :class="key % 2 === 0 ? 'float-right' : 'float-left'">
+            <tbody>
+              <tr v-for="(subscription) in entry.subscriptions" :key="subscription.userName">
+                <td>
+                  <q-input v-model="subscription.userName" :label="$t('userName')" outlined />
+                </td>
+                <td>
+                  <q-select v-model="subscription.state" :options="subscriptionStates" label="" outlined map-options />
+                </td>
+                <td>
+                  <q-btn color="secondary" :label="$t('save')" />
+                </td>
+              </tr>
+            </tbody>
+          </q-markup-table>
+        </div>
       </div>
     </q-timeline-entry>
 
@@ -12,72 +29,32 @@
 </template>
 
 <script>
-import { ref } from 'vue';
 import { date } from 'quasar';
 import { useI18n } from 'vue-i18n';
+import { apiStore } from 'stores/api';
 
 export default {
   setup() {
+    const store = apiStore();
     const { t } = useI18n();
-    const entries = ref([
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-17 17:00'
-      },
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-16 11:00'
-      },
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-16 11:00'
-      },
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-16 11:00'
-      },
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-16 11:00'
-      },
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-16 11:00'
-      },
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-16 11:00'
-      },
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-16 11:00'
-      },
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-16 11:00'
-      },
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-16 11:00'
-      },
-      {
-        _id: '1234',
-        name: 'Bouldern / FLASHH',
-        date: '2023-10-16 11:00'
-      }
-    ]);
+    const subscriptionStates = [];
+    [
+      'suggested',
+      'confirmed',
+      'rejected',
+      'maybe'
+    ].forEach((key) => {
+      subscriptionStates.push(({
+        value: key,
+        label: t(`subscriptionStates.${key}`)
+      }));
+    });
+
+    setInterval(store.fetchEntries, 1000);
 
     return {
+      store,
+      subscriptionStates,
       getDayDiffString(dayDiff) {
         if (dayDiff === 1) {
           return t('tomorrow');
@@ -97,8 +74,7 @@ export default {
           prettyDate: date.formatDate(realDate, dateFormat),
           dayDiffString: this.getDayDiffString(dayDiff)
         };
-      },
-      entries
+      }
     };
   }
 };
