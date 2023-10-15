@@ -31,7 +31,7 @@
 <script>
 import { date } from 'quasar';
 import { useI18n } from 'vue-i18n';
-import { apiStore } from 'stores/api';
+import { apiStore } from 'stores/apiStore';
 
 export default {
   setup() {
