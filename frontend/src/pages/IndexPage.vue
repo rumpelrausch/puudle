@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center vertical-top">
+  <q-page class="flex flex-center vertical-top q-px-xs">
     <eventTimeLine></eventTimeLine>
   </q-page>
 </template>
