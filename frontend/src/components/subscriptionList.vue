@@ -9,7 +9,7 @@
         </div>
         <div class="col-grow" dense>
           <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense standout
-            @update:model-value="subscriptionChanged(userNameBefore, subscription)" @focus="store.suspendUpdate" />
+            @update:model-value="updateSubscription(userNameBefore, subscription)" @focus="store.suspendUpdate" />
         </div>
       </q-card>
       <q-card class="row content-stretch items-center rounded-borders" bordered flat>
@@ -62,12 +62,12 @@ export default {
       newSubscription.value.state = subscriptionStates[0];
     }
 
-    function subscriptionChanged(userNameBefore, subscription) {
+    function updateSubscription(userNameBefore, subscription) {
       if (subscription.state.value) {
         // unmap select options
         subscription.state = subscription.state.value;
       }
-      store.subscriptionChanged(props.entry._id, userNameBefore, subscription);
+      store.updateSubscription(props.entry._id, userNameBefore, subscription);
     }
 
     function addSubscription() {
@@ -92,7 +92,7 @@ export default {
       store,
 
       // methods
-      subscriptionChanged,
+      updateSubscription,
       addSubscription
     };
   }

@@ -35,6 +35,7 @@ export const apiStore = defineStore('counter', {
       }
       updateTimer = setInterval(this.fetchEntries, POLL_INTERVAL_MS);
     },
+
     suspendUpdate() {
       isPollAllowed = false;
       if (pollDelayTimer) {
@@ -42,12 +43,14 @@ export const apiStore = defineStore('counter', {
       }
       pollDelayTimer = setTimeout(() => { isPollAllowed = true; }, DELAYED_POLL_MS);
     },
+
     resumeUpdate() {
       if (pollDelayTimer) {
         clearTimeout(pollDelayTimer);
       }
       isPollAllowed = true;
     },
+
     async addSubscription(entryId, subscription) {
       const response = await axios.post(`${URL_API}/entry/${entryId}/subscription`, subscription);
       if (!response) {
@@ -55,7 +58,8 @@ export const apiStore = defineStore('counter', {
       }
       this.fetchEntries(true);
     },
-    async subscriptionChanged(entryId, userName, newSubscription) {
+
+    async updateSubscription(entryId, userName, newSubscription) {
       const response = await axios.patch(`${URL_API}/entry/${entryId}/subscription/${userName}`, {
         state: newSubscription.state
       });
@@ -64,6 +68,7 @@ export const apiStore = defineStore('counter', {
       }
       this.fetchEntries(true);
     },
+
     async fetchEntries(force = false) {
       const entries = await poll(force);
       if (!entries) {
