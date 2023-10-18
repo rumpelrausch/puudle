@@ -48,6 +48,13 @@ export const apiStore = defineStore('counter', {
       }
       isPollAllowed = true;
     },
+    async addSubscription(entryId, subscription) {
+      const response = await axios.post(`${URL_API}/entry/${entryId}/subscription`, subscription);
+      if (!response) {
+        return null;
+      }
+      this.fetchEntries(true);
+    },
     async subscriptionChanged(entryId, userName, newSubscription) {
       const response = await axios.patch(`${URL_API}/entry/${entryId}/subscription/${userName}`, {
         state: newSubscription.state

@@ -22,7 +22,7 @@
             @focus="store.suspendUpdate" />
         </div>
         <div class="q-ml-xs" dense>
-          <q-btn icon="bi-floppy" color="green-4" dense ripple flat />
+          <q-btn icon="bi-floppy" color="green-4" dense ripple flat @click="addSubscription" />
         </div>
       </q-card>
     </div>
@@ -62,8 +62,6 @@ export default {
       newSubscription.value.state = subscriptionStates[0];
     }
 
-    buildSubscriptionStates();
-
     function subscriptionChanged(userNameBefore, subscription) {
       if (subscription.state.value) {
         // unmap select options
@@ -72,7 +70,14 @@ export default {
       store.subscriptionChanged(props.entry._id, userNameBefore, subscription);
     }
 
+    function addSubscription() {
+      const subscription = { ...newSubscription.value };
+      subscription.state = subscription.state.value;
+      store.addSubscription(props.entry._id, subscription);
+    }
+
     watch(locale, () => buildSubscriptionStates());
+    buildSubscriptionStates();
 
     return {
       // props
@@ -87,7 +92,8 @@ export default {
       store,
 
       // methods
-      subscriptionChanged
+      subscriptionChanged,
+      addSubscription
     };
   }
 };
