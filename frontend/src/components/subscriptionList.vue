@@ -35,17 +35,14 @@ import { apiStore } from 'stores/apiStore';
 import { useI18n } from 'vue-i18n';
 
 export default {
-  // name: 'subscriptionList',
   props: {
     entry: Object
   },
   setup(props) {
     const store = apiStore();
     const { t, locale } = useI18n();
-
     const subscriptionStates = [];
     const newSubscription = ref({});
-
     function buildSubscriptionStates() {
       subscriptionStates.length = 0;
       [
@@ -61,7 +58,6 @@ export default {
       });
       newSubscription.value.state = subscriptionStates[0];
     }
-
     function updateSubscription(userNameBefore, subscription) {
       if (subscription.state.value) {
         // unmap select options
@@ -69,28 +65,22 @@ export default {
       }
       store.updateSubscription(props.entry._id, userNameBefore, subscription);
     }
-
     function addSubscription() {
       const subscription = { ...newSubscription.value };
       subscription.state = subscription.state.value;
       store.addSubscription(props.entry._id, subscription);
     }
-
     watch(locale, () => buildSubscriptionStates());
     buildSubscriptionStates();
-
     return {
       // props
       entryId: props.entry._id,
       subscriptions: props.entry.subscriptions,
-
       // computed
       subscriptionStates,
       newSubscription,
-
       // globals
       store,
-
       // methods
       updateSubscription,
       addSubscription

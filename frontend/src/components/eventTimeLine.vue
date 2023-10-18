@@ -1,5 +1,5 @@
 <template>
-  <!-- <q-btn @click="store.add()">+</q-btn> -->
+  <newEvent></newEvent>
   <q-timeline layout="loose">
     <q-timeline-entry v-for="(entry, key) in entries" :key="entry._id" :title="entry.entryName"
       :side="key % 2 === 0 ? 'left' : 'right'">
@@ -11,7 +11,6 @@
         </div>
       </div>
     </q-timeline-entry>
-
   </q-timeline>
 </template>
 
@@ -21,10 +20,12 @@ import { useI18n } from 'vue-i18n';
 import { apiStore } from 'stores/apiStore';
 import { storeToRefs } from 'pinia';
 import subscriptionList from 'components/subscriptionList.vue';
+import newEvent from 'components/newEvent.vue';
 
 export default {
   components: {
-    subscriptionList
+    subscriptionList,
+    newEvent
   },
   setup() {
     const store = apiStore();
