@@ -26,7 +26,8 @@
         <q-card class="row content-stretch items-center rounded-borders" bordered flat>
           <div class="col-6">
             <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm" lazy-rules
-              :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]" borderless dense stack-label />
+              :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]" @blur="resetValidation"
+              borderless dense stack-label />
           </div>
           <div class="col-6" dense>
             <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" lazy-rules :rules="[true]"
@@ -86,6 +87,13 @@ export default {
         state: subscriptionStates[0],
         comment: ''
       };
+      resetValidation();
+    }
+
+    function resetValidation() {
+      if (newSubscriptionForm.value) {
+        newSubscriptionForm.value.resetValidation();
+      }
     }
 
     function updateSubscription(userNameBefore, subscription) {
@@ -102,13 +110,12 @@ export default {
       const entry = await store.addSubscription(props.entry._id, subscription);
       subscriptions.value = entry.subscriptions;
       resetNewSubscription();
-      newSubscriptionForm.value.resetValidation();
     }
 
     async function deleteSubscription(userName) {
       const entry = await store.deleteSubscription(props.entry._id, userName);
       subscriptions.value = entry.subscriptions;
-      newSubscriptionForm.value.resetValidation();
+      resetValidation();
     }
 
     function confirmDelete(userName) {
@@ -123,7 +130,6 @@ export default {
     watch(locale, () => {
       buildSubscriptionStates();
       resetNewSubscription();
-      newSubscriptionForm.value.resetValidation();
     });
 
     buildSubscriptionStates();
@@ -141,7 +147,8 @@ export default {
       updateSubscription,
       addSubscription,
       confirmDelete,
-      resetNewSubscription
+      resetNewSubscription,
+      resetValidation
     };
   }
 };
