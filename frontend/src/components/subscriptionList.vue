@@ -5,7 +5,8 @@
         :set="userNameBefore = subscription.userName" bordered flat
         class="row content-stretch items-center rounded-borders q-mb-xs">
         <div class="col-grow bg-grey-1">
-          <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense stack-label />
+          <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense
+            stack-label />
         </div>
         <div class="col-6" dense>
           <q-input v-model="subscription.comment" :label="$t('comment')"
@@ -13,30 +14,33 @@
             borderless dense stack-label />
         </div>
         <div class="col-8" dense>
-          <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense standout="bg-primary text-white"
-            @update:model-value="updateSubscription(userNameBefore, subscription)" @focus="store.suspendUpdate" />
+          <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
+            standout="bg-primary text-white" @update:model-value="updateSubscription(userNameBefore, subscription)"
+            @focus="store.suspendUpdate" />
         </div>
         <div class="col" dense>
           <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(userNameBefore)" dense ripple flat />
         </div>
       </q-card>
-      <q-card class="row content-stretch items-center rounded-borders" bordered flat>
-        <div class="col-6">
-          <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm" borderless dense
-            stack-label />
-        </div>
-        <div class="col-6" dense>
-          <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" borderless dense stack-label
-            @focus="store.suspendUpdate" />
-        </div>
-        <div class="col-8" dense>
-          <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense standout="bg-primary text-white"
-            @focus="store.suspendUpdate" />
-        </div>
-         <div class="col" dense>
-          <q-btn icon="bi-floppy" color="green-4" dense ripple flat @click="addSubscription" />
-        </div>
-      </q-card>
+      <q-form ref="newSubscriptionForm" @submit="addSubscription">
+        <q-card class="row content-stretch items-center rounded-borders" bordered flat>
+          <div class="col-6">
+            <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm" lazy-rules
+              :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]" borderless dense stack-label />
+          </div>
+          <div class="col-6" dense>
+            <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" lazy-rules :rules="[true]"
+              borderless dense stack-label @focus="store.suspendUpdate" />
+          </div>
+          <div class="col-8" dense>
+            <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense
+              standout="bg-primary text-white" @focus="store.suspendUpdate" />
+          </div>
+          <div class="col" dense>
+            <q-btn type="submit" icon="bi-floppy" color="green-4" class="float-right" dense ripple flat />
+          </div>
+        </q-card>
+      </q-form>
     </div>
   </div>
 </template>
@@ -46,6 +50,8 @@ import { useQuasar } from 'quasar';
 import { ref, watch } from 'vue';
 import { apiStore } from 'stores/apiStore';
 import { useI18n } from 'vue-i18n';
+
+const MIN_USERNAME_LENGTH = 2;
 
 export default {
   props: {
@@ -58,6 +64,7 @@ export default {
     const subscriptionStates = [];
     const subscriptions = ref(props.entry.subscriptions);
     const newSubscription = ref({});
+    const newSubscriptionForm = ref(null);
     function buildSubscriptionStates() {
       subscriptionStates.length = 0;
       [
@@ -95,11 +102,13 @@ export default {
       const entry = await store.addSubscription(props.entry._id, subscription);
       subscriptions.value = entry.subscriptions;
       resetNewSubscription();
+      newSubscriptionForm.value.resetValidation();
     }
 
     async function deleteSubscription(userName) {
       const entry = await store.deleteSubscription(props.entry._id, userName);
       subscriptions.value = entry.subscriptions;
+      newSubscriptionForm.value.resetValidation();
     }
 
     function confirmDelete(userName) {
@@ -111,12 +120,19 @@ export default {
       }).onOk(() => deleteSubscription(userName));
     }
 
-    watch(locale, () => { buildSubscriptionStates(); resetNewSubscription(); });
-    // watch(store.entries, () => { console.log('entry changed', store.entries); });
+    watch(locale, () => {
+      buildSubscriptionStates();
+      resetNewSubscription();
+      newSubscriptionForm.value.resetValidation();
+    });
+
     buildSubscriptionStates();
     resetNewSubscription();
 
     return {
+      newSubscriptionForm,
+      MIN_USERNAME_LENGTH,
+      get nameTooShort() { return t('minCharacters').replace('%s', MIN_USERNAME_LENGTH); },
       entryId: props.entry._id,
       subscriptions,
       subscriptionStates,
@@ -124,7 +140,8 @@ export default {
       store,
       updateSubscription,
       addSubscription,
-      confirmDelete
+      confirmDelete,
+      resetNewSubscription
     };
   }
 };
