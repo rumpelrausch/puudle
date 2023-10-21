@@ -3,34 +3,37 @@
     <div class="xq-mb-xs">
       <q-card v-for="subscription in subscriptions" :key="subscription.userName"
         :set="userNameBefore = subscription.userName" bordered flat
-        class="row content-stretch bg-white rounded-borders q-mb-xs">
-        <div class="col-grow">
-          <q-input :model-value="subscription.userName" borderless disable filled dense />
+        class="row content-stretch items-center rounded-borders q-mb-xs">
+        <div class="col-grow bg-grey-1">
+          <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense stack-label />
         </div>
-        <div class="col-grow" dense>
-          <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense standout
-            @update:model-value="updateSubscription(userNameBefore, subscription)" @focus="store.suspendUpdate" />
-        </div>
-        <div class="col-grow" dense>
+        <div class="col-6" dense>
           <q-input v-model="subscription.comment" :label="$t('comment')"
             @change="updateSubscription(userNameBefore, subscription)" @focus="store.suspendUpdate" class="q-pl-sm"
             borderless dense stack-label />
         </div>
+        <div class="col-8" dense>
+          <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense standout="bg-primary text-white"
+            @update:model-value="updateSubscription(userNameBefore, subscription)" @focus="store.suspendUpdate" />
+        </div>
+        <div class="col" dense>
+          <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(userNameBefore)" dense ripple flat />
+        </div>
       </q-card>
       <q-card class="row content-stretch items-center rounded-borders" bordered flat>
-        <div class="col-grow">
-          <q-input :label="$t('userName') + ':'" v-model="newSubscription.userName" class="q-pl-sm" borderless dense
+        <div class="col-6">
+          <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm" borderless dense
             stack-label />
         </div>
-        <div class="col-grow" dense>
-          <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense standout
-            @focus="store.suspendUpdate" />
-        </div>
-        <div class="col-grow" dense>
+        <div class="col-6" dense>
           <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" borderless dense stack-label
             @focus="store.suspendUpdate" />
         </div>
-        <div class="q-ml-xs" dense>
+        <div class="col-8" dense>
+          <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense standout="bg-primary text-white"
+            @focus="store.suspendUpdate" />
+        </div>
+         <div class="col" dense>
           <q-btn icon="bi-floppy" color="green-4" dense ripple flat @click="addSubscription" />
         </div>
       </q-card>
@@ -39,6 +42,7 @@
 </template>
 
 <script>
+import { useQuasar } from 'quasar';
 import { ref, watch } from 'vue';
 import { apiStore } from 'stores/apiStore';
 import { useI18n } from 'vue-i18n';
@@ -48,6 +52,7 @@ export default {
     entry: Object
   },
   setup(props) {
+    const $q = useQuasar();
     const store = apiStore();
     const { t, locale } = useI18n();
     const subscriptionStates = [];
@@ -92,6 +97,20 @@ export default {
       resetNewSubscription();
     }
 
+    async function deleteSubscription(userName) {
+      const entry = await store.deleteSubscription(props.entry._id, userName);
+      subscriptions.value = entry.subscriptions;
+    }
+
+    function confirmDelete(userName) {
+      $q.dialog({
+        message: t('deleteSubscription').replace('%s', userName),
+        cancel: t('cancel'),
+        ok: t('ok'),
+        focus: 'cancel'
+      }).onOk(() => deleteSubscription(userName));
+    }
+
     watch(locale, () => { buildSubscriptionStates(); resetNewSubscription(); });
     // watch(store.entries, () => { console.log('entry changed', store.entries); });
     buildSubscriptionStates();
@@ -104,7 +123,8 @@ export default {
       newSubscription,
       store,
       updateSubscription,
-      addSubscription
+      addSubscription,
+      confirmDelete
     };
   }
 };

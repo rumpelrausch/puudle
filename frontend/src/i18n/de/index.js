@@ -16,6 +16,9 @@ export default {
   eventName: 'Was / wo?',
   minCharacters: 'Bitte mindestens %s Zeichen eingeben.',
   comment: 'Kommentar',
+  deleteSubscription: 'Eintrag für "%s" löschen?',
+  ok: 'OK',
+  cancel: 'Abbrechen',
   date: {
     days: 'Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag'.split('_'),
     daysShort: 'So_Mo_Di_Mi_Do_Fr_Sa'.split('_'),

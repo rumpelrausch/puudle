@@ -92,10 +92,9 @@ export const apiStore = defineStore('counter', {
 
     async addSubscription(entryId, subscription) {
       const mySubscription = {
-        comment: 'no comment',
+        comment: '',
         ...subscription
       };
-      // console.log('save', mySubscription);
       const response = await axios.post(`${URL_API}/entry/${entryId}/subscription`, mySubscription);
       if (!response) {
         return null;
@@ -105,7 +104,6 @@ export const apiStore = defineStore('counter', {
     },
 
     async updateSubscription(entryId, userName, subscription) {
-      console.log('update');
       const response = await axios.patch(`${URL_API}/entry/${entryId}/subscription/${userName}`, {
         state: subscription.state,
         comment: subscription.comment
@@ -114,6 +112,15 @@ export const apiStore = defineStore('counter', {
         return null;
       }
       await this.fetchEntries(true);
+    },
+
+    async deleteSubscription(entryId, userName) {
+      const response = await axios.delete(`${URL_API}/entry/${entryId}/subscription/${userName}`);
+      if (!response) {
+        return null;
+      }
+      await this.fetchEntries(true);
+      return this.getEntryById(entryId);
     }
   }
 });
