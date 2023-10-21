@@ -5,7 +5,7 @@
       :side="key % 2 === 0 ? 'left' : 'right'">
       <div class="q-mb-xl" :set="parsedDate = getParsedDate(entry.date)">
         {{ parsedDate.prettyDate }} - {{ parsedDate.dayDiffString }}
-        <q-btn icon="bi-trash" color="red-4" @click="store.deleteEntry(entry._id)" dense ripple flat />
+        <q-btn icon="bi-trash" color="red-4" v-if="isAdmin" @click="store.deleteEntry(entry._id)" dense ripple flat />
         <div class="q-pb-xl">
           <subscriptionList :entry="entry">
           </subscriptionList>
@@ -23,6 +23,8 @@ import { storeToRefs } from 'pinia';
 import subscriptionList from 'components/subscriptionList.vue';
 import newEvent from 'components/newEvent.vue';
 
+const isAdmin = true;
+
 export default {
   components: {
     subscriptionList,
@@ -38,6 +40,7 @@ export default {
     return {
       store,
       entries,
+      isAdmin,
 
       getDayDiffString(dayDiff) {
         if (dayDiff === 0) {
