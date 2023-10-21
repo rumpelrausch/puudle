@@ -91,11 +91,7 @@ export const apiStore = defineStore('counter', {
     },
 
     async addSubscription(entryId, subscription) {
-      const mySubscription = {
-        comment: '',
-        ...subscription
-      };
-      const response = await axios.post(`${URL_API}/entry/${entryId}/subscription`, mySubscription);
+      const response = await axios.post(`${URL_API}/entry/${entryId}/subscription`, subscription);
       if (!response) {
         return null;
       }
