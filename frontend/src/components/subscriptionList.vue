@@ -11,6 +11,11 @@
           <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense standout
             @update:model-value="updateSubscription(userNameBefore, subscription)" @focus="store.suspendUpdate" />
         </div>
+        <div class="col-grow" dense>
+          <q-input v-model="subscription.comment" :label="$t('comment')"
+            @change="updateSubscription(userNameBefore, subscription)" @focus="store.suspendUpdate" class="q-pl-sm"
+            borderless dense stack-label />
+        </div>
       </q-card>
       <q-card class="row content-stretch items-center rounded-borders" bordered flat>
         <div class="col-grow">
@@ -19,6 +24,10 @@
         </div>
         <div class="col-grow" dense>
           <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense standout
+            @focus="store.suspendUpdate" />
+        </div>
+        <div class="col-grow" dense>
+          <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" borderless dense stack-label
             @focus="store.suspendUpdate" />
         </div>
         <div class="q-ml-xs" dense>
@@ -57,8 +66,16 @@ export default {
           label: t(`subscriptionStates.${key}`)
         }));
       });
-      newSubscription.value.state = subscriptionStates[0];
     }
+
+    function resetNewSubscription() {
+      newSubscription.value = {
+        userName: '',
+        state: subscriptionStates[0],
+        comment: ''
+      };
+    }
+
     function updateSubscription(userNameBefore, subscription) {
       if (subscription.state.value) {
         // unmap select options
@@ -66,17 +83,20 @@ export default {
       }
       store.updateSubscription(props.entry._id, userNameBefore, subscription);
     }
+
     async function addSubscription() {
       const subscription = { ...newSubscription.value };
       subscription.state = subscription.state.value;
       const entry = await store.addSubscription(props.entry._id, subscription);
       subscriptions.value = entry.subscriptions;
-      newSubscription.value.userName = '';
-      newSubscription.value.state = subscriptionStates[0];
+      resetNewSubscription();
     }
-    watch(locale, () => buildSubscriptionStates());
-    watch(store.entries, () => { console.log('entry changed', store.entries); });
+
+    watch(locale, () => { buildSubscriptionStates(); resetNewSubscription(); });
+    // watch(store.entries, () => { console.log('entry changed', store.entries); });
     buildSubscriptionStates();
+    resetNewSubscription();
+
     return {
       entryId: props.entry._id,
       subscriptions,

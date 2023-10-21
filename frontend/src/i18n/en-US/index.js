@@ -15,6 +15,7 @@ export default {
   titleAddEvent: 'Create an invitation',
   eventName: 'What / where?',
   minCharacters: 'Please enter at least %s characters.',
+  comment: 'Comment',
   date: {
     days: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
     daysShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),

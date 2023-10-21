@@ -91,7 +91,12 @@ export const apiStore = defineStore('counter', {
     },
 
     async addSubscription(entryId, subscription) {
-      const response = await axios.post(`${URL_API}/entry/${entryId}/subscription`, subscription);
+      const mySubscription = {
+        comment: 'no comment',
+        ...subscription
+      };
+      // console.log('save', mySubscription);
+      const response = await axios.post(`${URL_API}/entry/${entryId}/subscription`, mySubscription);
       if (!response) {
         return null;
       }
@@ -99,9 +104,11 @@ export const apiStore = defineStore('counter', {
       return this.getEntryById(entryId);
     },
 
-    async updateSubscription(entryId, userName, newSubscription) {
+    async updateSubscription(entryId, userName, subscription) {
+      console.log('update');
       const response = await axios.patch(`${URL_API}/entry/${entryId}/subscription/${userName}`, {
-        state: newSubscription.state
+        state: subscription.state,
+        comment: subscription.comment
       });
       if (!response) {
         return null;
