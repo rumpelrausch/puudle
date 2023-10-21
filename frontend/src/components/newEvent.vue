@@ -10,7 +10,7 @@
       <q-card-section>
         <q-form>
           <q-input v-model="newEvent.entryName" :label="$t('eventName')"></q-input>
-          <q-date v-model="newEvent.date" minimal />
+          <q-date v-model="newEvent.date" :locale="myLocale" minimal />
         </q-form>
       </q-card-section>
     </q-card>
@@ -19,9 +19,11 @@
 
 <script>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default {
   setup() {
+    const { tm } = useI18n();
     const showState = ref(false);
     const newEvent = ref({
       entryName: '',
@@ -29,6 +31,9 @@ export default {
       time: '17:00'
     });
     return {
+      get myLocale() {
+        return tm('date');
+      },
       showState,
       newEvent
     };
