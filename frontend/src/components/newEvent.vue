@@ -24,7 +24,7 @@
                 <template v-slot:prepend>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date v-model="myEvent.date" :locale="myLocale" :mask="$t('dateFormatPretty')" minimal>
+                      <q-date v-model="myEvent.date" :locale="myLocale" :mask="$t('dateFormatPretty')" emit-immediately minimal>
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup icon="bi-check2-square" color="primary" />
                         </div>
@@ -61,29 +61,31 @@
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { date } from 'quasar';
+import { apiStore } from 'stores/apiStore';
 
 const MIN_ENTRY_NAME_LENGTH = 3;
 
 export default {
   setup() {
+    const store = apiStore();
     const { t, tm, locale } = useI18n();
     const showState = ref(false);
     const today = date.buildDate({ hours: 17, minutes: 0 });
     const myEvent = ref({
       entryName: '',
-      date: date.formatDate(today, t('dateFormatPretty')),
+      date: null,
       get result() {
         return `${myEvent.value.date} ${myEvent.value.time}`;
       }
     });
 
-    watch(showState, () => {
+    function reset() {
       myEvent.value.entryName = '';
-    });
-
-    watch(locale, (a, b) => {
       myEvent.value.date = date.formatDate(today, t('dateFormatPretty'));
-    });
+    }
+
+    watch(showState, reset);
+    watch(locale, reset);
 
     return {
       get myLocale() {
@@ -97,6 +99,10 @@ export default {
         myEvent.value.entryName = val;
       },
       onSubmit() {
+        const realDate = date.extractDate(myEvent.value.date, t('dateFormatPretty'));
+        if (!store.addEntry(myEvent.value.entryName, realDate)) {
+          return;
+        }
         showState.value = false;
       }
     };

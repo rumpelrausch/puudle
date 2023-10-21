@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { date } from 'quasar';
 
 const URL_API = process.env.DEV ? 'http://localhost:8080/api/v0' : '/api/v0';
 const POLL_INTERVAL_MS = 2000;
@@ -8,6 +9,10 @@ const DELAYED_POLL_MS = 15000;
 let isPollAllowed = true;
 let updateTimer;
 let pollDelayTimer;
+
+function convertRealDateToDB(realDate) {
+  return date.formatDate(realDate, 'YYYY-MM-DD HH:mm');
+}
 
 async function poll(force = false) {
   if (!force && !isPollAllowed) {
@@ -51,6 +56,28 @@ export const apiStore = defineStore('counter', {
       isPollAllowed = true;
     },
 
+    async fetchEntries(force = false) {
+      const entries = await poll(force);
+      if (!entries) {
+        return;
+      }
+      this.entries = entries;
+    },
+
+    async addEntry(entryName, realDate) {
+      const body = {
+        type: 'entry',
+        subscriptions: [],
+        entryName,
+        date: convertRealDateToDB(realDate)
+      };
+      const response = await axios.post(`${URL_API}/entry`, body);
+      if (!response) {
+        return null;
+      }
+      this.fetchEntries(true);
+    },
+
     async addSubscription(entryId, subscription) {
       const response = await axios.post(`${URL_API}/entry/${entryId}/subscription`, subscription);
       if (!response) {
@@ -67,14 +94,6 @@ export const apiStore = defineStore('counter', {
         return null;
       }
       this.fetchEntries(true);
-    },
-
-    async fetchEntries(force = false) {
-      const entries = await poll(force);
-      if (!entries) {
-        return;
-      }
-      this.entries = entries;
     }
   }
 });
