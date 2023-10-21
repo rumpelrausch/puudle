@@ -1,5 +1,5 @@
 <template>
-  <div class="q-mb-xl">
+  <div class="q-mb-xl non-selectable">
     <div class="xq-mb-xs">
       <q-card v-for="subscription in subscriptions" :key="subscription.userName"
         :set="userNameBefore = subscription.userName" bordered flat

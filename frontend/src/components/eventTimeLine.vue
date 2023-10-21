@@ -6,7 +6,7 @@
       <div class="q-mb-xl" :set="parsedDate = getParsedDate(entry.date)">
         {{ parsedDate.prettyDate }} - {{ parsedDate.dayDiffString }}
         <q-btn icon="bi-trash" color="red-4" v-if="isAdmin" @click="store.deleteEntry(entry._id)" dense ripple flat />
-        <div class="q-pb-xl">
+        <div class="q-pb-xl non-selectable">
           <subscriptionList :entry="entry">
           </subscriptionList>
         </div>
