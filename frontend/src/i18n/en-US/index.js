@@ -12,7 +12,7 @@ export default {
   },
   save: 'save',
   titleAddEvent: 'Create an invitation',
-  eventName: 'Event name',
+  eventName: 'What / where?',
   minCharacters: 'Please enter at least %s characters.',
   date: {
     days: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
@@ -22,5 +22,10 @@ export default {
     firstDayOfWeek: 0,
     format24h: false,
     pluralDay: 'days'
-  }
+  },
+  eventSuggestions: [
+    'Boulder session',
+    'Climbing session',
+    'Powwow'
+  ]
 };

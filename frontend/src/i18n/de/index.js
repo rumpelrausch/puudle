@@ -12,7 +12,7 @@ export default {
   },
   save: 'speichern',
   titleAddEvent: 'Einladung erstellen',
-  eventName: 'Veranstaltung',
+  eventName: 'Was / wo?',
   minCharacters: 'Bitte mindestens %s Zeichen eingeben.',
   date: {
     days: 'Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag'.split('_'),
@@ -22,5 +22,10 @@ export default {
     firstDayOfWeek: 1,
     format24h: true,
     pluralDay: 'Tage'
-  }
+  },
+  eventSuggestions: [
+    'Bouldern: FLASHH',
+    'Klettern: DAV',
+    'Treffen: '
+  ]
 };

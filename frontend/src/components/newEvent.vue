@@ -11,9 +11,13 @@
         <q-form @submit="onSubmit">
           <div class="row">
             <div class="column q-mr-sm q-mb-sm">
-              <q-input v-model="myEvent.entryName" :label="$t('eventName')" lazy-rules
-                :rules="[val => val && val.length >= MIN_ENTRY_NAME_LENGTH || nameTooShort]" outlined dense>
-              </q-input>
+              <!-- <q-input v-model="myEvent.entryName" :label="$t('eventName')" lazy-rules
+                :rules="[val => val && val.length >= MIN_ENTRY_NAME_LENGTH || nameTooShort]" outlined dense autofocus stack-label>
+              </q-input> -->
+              <q-select :model-value="myEvent.entryName" :label="$t('eventName')" :options="$tm('eventSuggestions')"
+                lazy-rules :rules="[val => val && val.length >= MIN_ENTRY_NAME_LENGTH || nameTooShort]"
+                @input-value="setEntryName" use-input fill-input hide-selected outlined dense stack-label>
+              </q-select>
             </div>
             <div class="column">
               <q-input v-model="myEvent.date" outlined dense lazy-rules :rules="[val => true]">
@@ -73,6 +77,10 @@ export default {
       }
     });
 
+    watch(showState, () => {
+      myEvent.value.entryName = '';
+    });
+
     watch(locale, (a, b) => {
       myEvent.value.date = date.formatDate(today, t('dateFormatPretty'));
     });
@@ -85,8 +93,11 @@ export default {
       myEvent,
       MIN_ENTRY_NAME_LENGTH,
       nameTooShort: t('minCharacters').replace('%s', MIN_ENTRY_NAME_LENGTH),
+      setEntryName(val) {
+        myEvent.value.entryName = val;
+      },
       onSubmit() {
-
+        showState.value = false;
       }
     };
   }
