@@ -1,6 +1,7 @@
 export default {
   mainTitle: 'Puudle: The appointment planner',
   dateFormatPretty: 'YYYY/MM/DD - HH:mm',
+  today: 'today',
   tomorrow: 'tomorrow',
   inDays: 'in %s days',
   userName: 'Name',

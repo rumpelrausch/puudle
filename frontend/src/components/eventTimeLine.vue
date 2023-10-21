@@ -41,6 +41,9 @@ export default {
 
       // methods
       getDayDiffString(dayDiff) {
+        if (dayDiff === 0) {
+          return t('today');
+        }
         if (dayDiff === 1) {
           return t('tomorrow');
         }
