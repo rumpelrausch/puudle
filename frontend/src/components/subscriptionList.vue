@@ -42,6 +42,7 @@ export default {
     const store = apiStore();
     const { t, locale } = useI18n();
     const subscriptionStates = [];
+    const subscriptions = ref(props.entry.subscriptions);
     const newSubscription = ref({});
     function buildSubscriptionStates() {
       subscriptionStates.length = 0;
@@ -65,23 +66,23 @@ export default {
       }
       store.updateSubscription(props.entry._id, userNameBefore, subscription);
     }
-    function addSubscription() {
+    async function addSubscription() {
       const subscription = { ...newSubscription.value };
       subscription.state = subscription.state.value;
-      store.addSubscription(props.entry._id, subscription);
+      const entry = await store.addSubscription(props.entry._id, subscription);
+      subscriptions.value = entry.subscriptions;
+      newSubscription.value.userName = '';
+      newSubscription.value.state = subscriptionStates[0];
     }
     watch(locale, () => buildSubscriptionStates());
+    watch(store.entries, () => { console.log('entry changed', store.entries); });
     buildSubscriptionStates();
     return {
-      // props
       entryId: props.entry._id,
-      subscriptions: props.entry.subscriptions,
-      // computed
+      subscriptions,
       subscriptionStates,
       newSubscription,
-      // globals
       store,
-      // methods
       updateSubscription,
       addSubscription
     };

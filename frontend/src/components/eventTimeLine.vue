@@ -5,6 +5,7 @@
       :side="key % 2 === 0 ? 'left' : 'right'">
       <div class="q-mb-xl" :set="parsedDate = getParsedDate(entry.date)">
         {{ parsedDate.prettyDate }} - {{ parsedDate.dayDiffString }}
+        <q-btn icon="bi-trash" color="red-4" @click="store.deleteEntry(entry._id)" dense ripple flat />
         <div class="q-pb-xl">
           <subscriptionList :entry="entry">
           </subscriptionList>
@@ -35,11 +36,9 @@ export default {
     store.startUpdate();
 
     return {
-      // globals
       store,
       entries,
 
-      // methods
       getDayDiffString(dayDiff) {
         if (dayDiff === 0) {
           return t('today');

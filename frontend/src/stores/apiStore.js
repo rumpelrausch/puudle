@@ -64,6 +64,10 @@ export const apiStore = defineStore('counter', {
       this.entries = entries;
     },
 
+    getEntryById(entryId) {
+      return this.entries.find((entry) => entry._id === entryId);
+    },
+
     async addEntry(entryName, realDate) {
       const body = {
         type: 'entry',
@@ -75,7 +79,15 @@ export const apiStore = defineStore('counter', {
       if (!response) {
         return null;
       }
-      this.fetchEntries(true);
+      await this.fetchEntries(true);
+    },
+
+    async deleteEntry(entryId) {
+      const response = await axios.delete(`${URL_API}/entry/${entryId}`);
+      if (!response) {
+        return null;
+      }
+      await this.fetchEntries(true);
     },
 
     async addSubscription(entryId, subscription) {
@@ -83,7 +95,8 @@ export const apiStore = defineStore('counter', {
       if (!response) {
         return null;
       }
-      this.fetchEntries(true);
+      await this.fetchEntries(true);
+      return this.getEntryById(entryId);
     },
 
     async updateSubscription(entryId, userName, newSubscription) {
@@ -93,7 +106,7 @@ export const apiStore = defineStore('counter', {
       if (!response) {
         return null;
       }
-      this.fetchEntries(true);
+      await this.fetchEntries(true);
     }
   }
 });
