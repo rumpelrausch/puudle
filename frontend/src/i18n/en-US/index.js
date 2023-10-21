@@ -12,7 +12,8 @@ export default {
   },
   save: 'save',
   titleAddEvent: 'Create an invitation',
-  eventName: 'Title',
+  eventName: 'Event name',
+  minCharacters: 'Please enter at least %s characters.',
   date: {
     days: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
     daysShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),

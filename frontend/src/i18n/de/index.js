@@ -12,7 +12,8 @@ export default {
   },
   save: 'speichern',
   titleAddEvent: 'Einladung erstellen',
-  eventName: 'Titel',
+  eventName: 'Veranstaltung',
+  minCharacters: 'Bitte mindestens %s Zeichen eingeben.',
   date: {
     days: 'Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag'.split('_'),
     daysShort: 'So_Mo_Di_Mi_Do_Fr_Sa'.split('_'),

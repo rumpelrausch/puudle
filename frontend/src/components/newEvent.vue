@@ -8,17 +8,19 @@
         <q-btn icon="bi-x-square" flat dense v-close-popup />
       </q-card-section>
       <q-card-section>
-        <q-form>
+        <q-form @submit="onSubmit">
           <div class="row">
             <div class="column q-mr-sm q-mb-sm">
-              <q-input v-model="newEvent.entryName" :label="$t('eventName')" outlined dense></q-input>
+              <q-input v-model="myEvent.entryName" :label="$t('eventName')" lazy-rules
+                :rules="[val => val && val.length >= MIN_ENTRY_NAME_LENGTH || nameTooShort]" outlined dense>
+              </q-input>
             </div>
             <div class="column">
-              <q-input v-model="newEvent.date" outlined dense>
+              <q-input v-model="myEvent.date" outlined dense lazy-rules :rules="[val => true]">
                 <template v-slot:prepend>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date v-model="newEvent.date" :locale="myLocale" :mask="$t('dateFormatPretty')" minimal>
+                      <q-date v-model="myEvent.date" :locale="myLocale" :mask="$t('dateFormatPretty')" minimal>
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup icon="bi-check2-square" color="primary" />
                         </div>
@@ -30,8 +32,8 @@
                 <template v-slot:append>
                   <q-icon name="access_time" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-time v-model="newEvent.date" :mask="$t('dateFormatPretty')" :format24h="myLocale.format24h"
-                        :minute-options="[0,15,30,45]">
+                      <q-time v-model="myEvent.date" :mask="$t('dateFormatPretty')" :format24h="myLocale.format24h"
+                        :minute-options="[0, 15, 30, 45]">
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup icon="bi-check2-square" color="primary" />
                         </div>
@@ -43,7 +45,7 @@
             </div>
           </div>
           <div>
-            <q-btn icon="bi-floppy" color="green-4" v-close-popup dense ripple xflat />
+            <q-btn icon="bi-floppy" type="submit" color="green-4" dense ripple />
           </div>
         </q-form>
       </q-card-section>
@@ -56,21 +58,23 @@ import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { date } from 'quasar';
 
+const MIN_ENTRY_NAME_LENGTH = 3;
+
 export default {
   setup() {
     const { t, tm, locale } = useI18n();
     const showState = ref(false);
     const today = date.buildDate({ hours: 17, minutes: 0 });
-    const newEvent = ref({
+    const myEvent = ref({
       entryName: '',
       date: date.formatDate(today, t('dateFormatPretty')),
       get result() {
-        return `${newEvent.value.date} ${newEvent.value.time}`;
+        return `${myEvent.value.date} ${myEvent.value.time}`;
       }
     });
 
     watch(locale, (a, b) => {
-      newEvent.value.date = date.formatDate(today, t('dateFormatPretty'));
+      myEvent.value.date = date.formatDate(today, t('dateFormatPretty'));
     });
 
     return {
@@ -78,7 +82,12 @@ export default {
         return tm('date');
       },
       showState,
-      newEvent
+      myEvent,
+      MIN_ENTRY_NAME_LENGTH,
+      nameTooShort: t('minCharacters').replace('%s', MIN_ENTRY_NAME_LENGTH),
+      onSubmit() {
+
+      }
     };
   }
 };
