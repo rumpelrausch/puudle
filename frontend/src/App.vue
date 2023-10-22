@@ -1,11 +1,21 @@
 <template>
+  <q-ajax-bar ref="bar" position="bottom" :hijack-filter="store.getHijackFilter"/>
   <router-view />
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { ref } from 'vue';
+import { apiStore } from 'stores/apiStore';
 
-export default defineComponent({
-  name: 'App'
-});
+export default {
+  setup() {
+    const store = apiStore();
+    const bar = ref(null);
+
+    return {
+      store,
+      bar
+    };
+  }
+};
 </script>

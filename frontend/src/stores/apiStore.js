@@ -9,6 +9,7 @@ const DELAYED_POLL_MS = 15000;
 let isPollAllowed = true;
 let updateTimer;
 let pollDelayTimer;
+let duringPoll = false;
 
 function convertRealDateToDB(realDate) {
   return date.formatDate(realDate, 'YYYY-MM-DD HH:mm');
@@ -18,7 +19,9 @@ async function poll(force = false) {
   if (!force && !isPollAllowed) {
     return null;
   }
+  duringPoll = true;
   const response = await axios.get(`${URL_API}/entry`);
+  duringPoll = false;
   if (!response) {
     return null;
   }
@@ -30,10 +33,11 @@ export const apiStore = defineStore('counter', {
     entries: []
   }),
 
-  getters: {
-  },
-
   actions: {
+    getHijackFilter() {
+      return !duringPoll;
+    },
+
     startUpdate() {
       if (updateTimer) {
         return;
