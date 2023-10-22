@@ -2,7 +2,14 @@ const entryModel = require('../model/entryModel');
 
 const getEntryList = async (requestParams) => {
     const entry = new entryModel();
-    return await entry.list(requestParams.fromDate);
+    return (
+        await entry.list(requestParams.fromDate)
+    ).map((myEntry) => {
+        return {
+            ...myEntry,
+            secondsOld: Math.floor((new Date().getTime() - Date.parse(myEntry.createdAt)) / 1000)
+        }
+    });
 };
 
 const addEntry = async (entryData) => {
@@ -21,7 +28,9 @@ const updateEntry = async (entryData) => {
 
 const getEntry = async (entryId) => {
     const entry = new entryModel();
-    return await entry.get(entryId);
+    const myEntry = await entry.get(entryId);
+    myEntry.secondsOld = Math.floor((new Date().getTime() - Date.parse(myEntry.createdAt)) / 1000);
+    return myEntry;
 };
 
 const deleteEntry = async (entryId) => {
