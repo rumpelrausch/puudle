@@ -1,8 +1,8 @@
 <template>
   <div class="self-start flex flex-center">
     <newEvent></newEvent>
-    <q-timeline layout="loose">
-      <q-timeline-entry v-for="(entry, key) in entries" :key="entry._id" :title="entry.entryName"
+    <q-timeline xayout="loose">
+      <q-timeline-entry v-for="(entry, key) in entries" :key="entry._id" :subtitle="entry.entryName"
         icon="group" color="grey-6" class="non-selectable"
         :side="key % 2 === 0 ? 'left' : 'right'">
         <div class="q-mb-xl" :set="parsedDate = getParsedDate(entry.date)">

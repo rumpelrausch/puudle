@@ -3,20 +3,21 @@
     <div class="xq-mb-xs">
       <q-card v-for="subscription in subscriptions" :key="subscription.userName" bordered flat
         class="row content-stretch items-center rounded-borders q-mb-xs">
-        <div class="col-grow bg-grey-1" :set="subscription.userNameBefore = subscription.userName">
+        <div class="col-8 bg-grey-1" :set="subscription.userNameBefore = subscription.userName">
           <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense
             stack-label />
         </div>
-        <div class="col-6" dense>
-          <q-input v-model="subscription.comment" :label="$t('comment')" :debounce="AUTO_SAVE_MILLISECONDS"
-            @change="updateSubscription(subscription.userNameBefore, subscription)" @focus="store.suspendUpdate"
-            class="q-pl-sm" borderless dense stack-label />
-        </div>
-        <div class="col-8" dense>
+        <div class="col-4" dense>
           <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
             standout="bg-primary text-white"
             @update:model-value="updateSubscription(subscription.userNameBefore, subscription)"
             @focus="store.suspendUpdate" />
+        </div>
+        <div class="col-6" dense>
+          <q-input v-model="subscription.comment" :label="$t('comment')" :debounce="AUTO_SAVE_MILLISECONDS"
+            @change="updateSubscription(subscription.userNameBefore, subscription)" @focus="store.suspendUpdate"
+            data-debounce="1"
+            class="q-pl-sm" borderless dense stack-label />
         </div>
         <div class="col" dense>
           <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(subscription.userNameBefore)" class="float-right"
@@ -25,18 +26,18 @@
       </q-card>
       <q-form ref="newSubscriptionForm" @submit="addSubscription">
         <q-card class="row content-stretch items-center rounded-borders" bordered flat>
-          <div class="col-6">
-            <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm" lazy-rules
+          <div class="col-8">
+            <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm q-pr-xl" lazy-rules
               hide-bottom-space :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]"
               @blur="resetValidation" borderless dense stack-label />
+          </div>
+          <div class="col-4" dense>
+            <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense
+              standout="bg-primary text-white" @focus="store.suspendUpdate" />
           </div>
           <div class="col-6" dense>
             <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" borderless dense stack-label
               @focus="store.suspendUpdate" />
-          </div>
-          <div class="col-8" dense>
-            <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense
-              standout="bg-primary text-white" @focus="store.suspendUpdate" />
           </div>
           <div class="col" dense>
             <q-btn type="submit" icon="bi-floppy" color="green-4" class="float-right" dense ripple flat />
@@ -72,6 +73,8 @@ export default {
     const newSubscription = ref({});
     const newSubscriptionForm = ref(null);
     const errorMessage = ref('');
+
+    $q.iconSet.field.error = '';
 
     function buildSubscriptionStates() {
       subscriptionStates.value.length = 0;
@@ -146,7 +149,7 @@ export default {
 
     watch(subscriptions, () => {
       // blur all inputs on changes -> force @change events
-      Array.from(document.querySelectorAll('input')).forEach(el => el.blur());
+      Array.from(document.querySelectorAll('[data-debounce]')).forEach(el => el.blur());
       store.resumeUpdate();
     }, {
       deep: true
