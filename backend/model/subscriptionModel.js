@@ -15,11 +15,11 @@ class subscriptionModel {
         maybe: 4
     };
 
-    #fieldList = {
-        userName: { required: true },
-        state: { required: true },
-        comment: { required: false }
-    };
+    #fieldList = [
+        'userName',
+        'state',
+        'comment'
+    ]
 
     constructor() {
         this.#entry = new entryModel();
@@ -60,11 +60,8 @@ class subscriptionModel {
 
     async getValidatedSubscription(subscriptionData) {
         const validatedSubscription = {};
-        for (const fieldName in this.#fieldList) {
-            const field = this.#fieldList[fieldName];
-            if (field.required || subscriptionData[fieldName]) {
-                validatedSubscription[fieldName] = await this.validate(fieldName, subscriptionData[fieldName]);
-            }
+        for (const fieldName of this.#fieldList) {
+            validatedSubscription[fieldName] = await this.validate(fieldName, subscriptionData[fieldName] || '');
         }
         return validatedSubscription;
     };

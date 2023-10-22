@@ -33,6 +33,7 @@ export const apiStore = () => {
     state: () => {
       return {
         entries: [],
+        entriesStamp: [0],
         currentErrorMessage: ''
       };
     },
@@ -64,12 +65,17 @@ export const apiStore = () => {
         isPollAllowed = true;
       },
 
+      updateStamp() {
+        this.entriesStamp[0] = new Date().getTime();
+      },
+
       async fetchEntries(force = false) {
         const entries = await poll(force);
         if (!entries) {
           return;
         }
         this.entries = entries;
+        this.updateStamp();
       },
 
       getEntryById(entryId) {
@@ -146,6 +152,6 @@ export const apiStore = () => {
     return error.response;
   });
 
-  poll(true);
+  store.fetchEntries(true);
   return store;
 };

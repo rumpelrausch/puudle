@@ -14,12 +14,13 @@
         </div>
         <div class="col-8" dense>
           <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
-            standout="bg-primary text-white" @update:model-value="updateSubscription(userNameBefore, subscription)"
+            standout="bg-primary text-white"
+            @update:model-value="updateSubscription(subscription.userNameBefore, subscription)"
             @focus="store.suspendUpdate" />
         </div>
         <div class="col" dense>
-          <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(userNameBefore)" class="float-right" dense ripple
-            flat />
+          <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(subscription.userNameBefore)" class="float-right"
+            dense ripple flat />
         </div>
       </q-card>
       <q-form ref="newSubscriptionForm" @submit="addSubscription">
@@ -146,15 +147,18 @@ export default {
     watch(subscriptions, () => {
       // blur all inputs on changes -> force @change events
       Array.from(document.querySelectorAll('input')).forEach(el => el.blur());
+      store.resumeUpdate();
     }, {
       deep: true
     });
 
-    watch(store.entries, () => {
+    watch(store.entriesStamp, () => {
       const myEntry = toRaw(store.entries).find((entry) => entry._id === props.entry._id);
       if (myEntry) {
         subscriptions.value = myEntry.subscriptions;
       }
+    }, {
+      deep: true
     });
 
     buildSubscriptionStates();
