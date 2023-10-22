@@ -84,25 +84,31 @@ export const apiStore = () => {
           date: convertRealDateToDB(realDate)
         };
         const response = await axios.post(`${URL_API}/entry`, body);
-        if (!response) {
-          return null;
+
+        if (response.status === 409) {
+          throw new Error('errorMessages.entryAlreadyExists');
         }
+
         await this.fetchEntries(true);
       },
 
       async deleteEntry(entryId) {
         const response = await axios.delete(`${URL_API}/entry/${entryId}`);
-        if (!response) {
-          return null;
+
+        if (response.status !== 200) {
+          throw new Error('errorMessages.genericApiError');
         }
+
         await this.fetchEntries(true);
       },
 
       async addSubscription(entryId, subscription) {
         const response = await axios.post(`${URL_API}/entry/${entryId}/subscription`, subscription);
-        if (!response) {
-          return null;
+
+        if (response.status === 409) {
+          throw new Error('errorMessages.entryAlreadyExists');
         }
+
         await this.fetchEntries(true);
         return this.getEntryById(entryId);
       },
@@ -137,7 +143,9 @@ export const apiStore = () => {
     return response;
   }, (error) => {
     store.$patch({ currentErrorMessage: error.message });
+    return error.response;
   });
+
   poll(true);
   return store;
 };

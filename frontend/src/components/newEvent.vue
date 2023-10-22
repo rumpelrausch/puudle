@@ -60,6 +60,9 @@
           </div>
         </q-form>
       </q-card-section>
+      <q-banner v-if="errorMessage.length > 0" class="bg-negative text-white">
+        {{ errorMessage }}
+      </q-banner>
     </q-card>
   </q-dialog>
 </template>
@@ -85,10 +88,12 @@ export default {
         return `${myEvent.value.date} ${myEvent.value.time}`;
       }
     });
+    const errorMessage = ref('');
 
     function reset() {
       myEvent.value.entryName = '';
       myEvent.value.date = date.formatDate(today, t('dateFormatPretty'));
+      errorMessage.value = '';
     }
 
     watch(showState, reset);
@@ -100,17 +105,19 @@ export default {
       },
       showState,
       myEvent,
+      errorMessage,
       MIN_ENTRY_NAME_LENGTH,
       nameTooShort: t('minCharacters').replace('%s', MIN_ENTRY_NAME_LENGTH),
       setEntryName(val) {
         myEvent.value.entryName = val;
       },
-      onSubmit() {
+      async onSubmit() {
         const realDate = date.extractDate(myEvent.value.date, t('dateFormatPretty'));
-        if (!store.addEntry(myEvent.value.entryName, realDate)) {
-          return;
-        }
-        showState.value = false;
+        await store.addEntry(myEvent.value.entryName, realDate)
+          .then(() => { showState.value = false; })
+          .catch(error => {
+            errorMessage.value = tm(error.message);
+          });
       }
     };
   }

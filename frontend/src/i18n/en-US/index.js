@@ -32,5 +32,10 @@ export default {
     'Boulder session',
     'Climbing session',
     'Powwow'
-  ]
+  ],
+  errorMessages: {
+    genericApiError: 'API error',
+    entryAlreadyExists: 'Such an appointment already exists.',
+    subscriptionAlreadyExists: 'Such an entry already exists.'
+  }
 };

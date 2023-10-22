@@ -32,5 +32,10 @@ export default {
     'Bouldern: FLASHH',
     'Klettern: DAV',
     'Treffen: '
-  ]
+  ],
+  errorMessages: {
+    genericApiError: 'API Fehler',
+    entryAlreadyExists: 'Solch eine Einladung existiert bereits.',
+    subscriptionAlreadyExists: 'Solch ein Eintrag existiert bereits.'
+  }
 };

@@ -19,7 +19,8 @@
             @focus="store.suspendUpdate" />
         </div>
         <div class="col" dense>
-          <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(userNameBefore)" class="float-right" dense ripple flat />
+          <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(userNameBefore)" class="float-right" dense ripple
+            flat />
         </div>
       </q-card>
       <q-form ref="newSubscriptionForm" @submit="addSubscription">
@@ -40,6 +41,9 @@
           <div class="col" dense>
             <q-btn type="submit" icon="bi-floppy" color="green-4" class="float-right" dense ripple flat />
           </div>
+          <q-banner v-if="errorMessage.length > 0" class="bg-negative text-white">
+            {{ errorMessage }}
+          </q-banner>
         </q-card>
       </q-form>
     </div>
@@ -61,11 +65,13 @@ export default {
   setup(props) {
     const $q = useQuasar();
     const store = apiStore();
-    const { t, locale } = useI18n();
+    const { t, tm, locale } = useI18n();
     const subscriptionStates = [];
     const subscriptions = ref(props.entry.subscriptions);
     const newSubscription = ref({});
     const newSubscriptionForm = ref(null);
+    const errorMessage = ref('');
+
     function buildSubscriptionStates() {
       subscriptionStates.length = 0;
       [
@@ -107,9 +113,14 @@ export default {
     async function addSubscription() {
       const subscription = { ...newSubscription.value };
       subscription.state = subscription.state.value;
-      const entry = await store.addSubscription(props.entry._id, subscription);
-      subscriptions.value = entry.subscriptions;
-      resetNewSubscription();
+      store.addSubscription(props.entry._id, subscription)
+        .then((entry) => {
+          subscriptions.value = entry.subscriptions;
+          resetNewSubscription();
+        })
+        .catch(error => {
+          errorMessage.value = tm(error.message);
+        });
     }
 
     async function deleteSubscription(userName) {
@@ -138,6 +149,7 @@ export default {
     return {
       newSubscriptionForm,
       MIN_USERNAME_LENGTH,
+      errorMessage,
       get nameTooShort() { return t('minCharacters').replace('%s', MIN_USERNAME_LENGTH); },
       entryId: props.entry._id,
       subscriptions,
