@@ -67,21 +67,21 @@ export default {
     const $q = useQuasar();
     const store = apiStore();
     const { t, tm, locale } = useI18n();
-    const subscriptionStates = [];
+    const subscriptionStates = ref([]);
     const subscriptions = ref(props.entry.subscriptions);
     const newSubscription = ref({});
     const newSubscriptionForm = ref(null);
     const errorMessage = ref('');
 
     function buildSubscriptionStates() {
-      subscriptionStates.length = 0;
+      subscriptionStates.value.length = 0;
       [
         'suggested',
         'confirmed',
         'rejected',
         'maybe'
       ].forEach((key) => {
-        subscriptionStates.push(({
+        subscriptionStates.value.push(({
           value: key,
           label: t(`subscriptionStates.${key}`)
         }));
@@ -91,7 +91,7 @@ export default {
     function resetNewSubscription() {
       newSubscription.value = {
         userName: '',
-        state: subscriptionStates[0],
+        state: subscriptionStates.value[0],
         comment: ''
       };
       resetValidation();
