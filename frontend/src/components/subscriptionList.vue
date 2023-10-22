@@ -19,7 +19,7 @@
             @focus="store.suspendUpdate" />
         </div>
         <div class="col" dense>
-          <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(userNameBefore)" dense ripple flat />
+          <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(userNameBefore)" class="float-right" dense ripple flat />
         </div>
       </q-card>
       <q-form ref="newSubscriptionForm" @submit="addSubscription">
