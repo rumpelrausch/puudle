@@ -1,17 +1,16 @@
 <template>
   <div class="q-mb-xl non-selectable">
     <div class="xq-mb-xs">
-      <q-card v-for="subscription in subscriptions" :key="subscription.userName"
-        :set="userNameBefore = subscription.userName" bordered flat
+      <q-card v-for="subscription in subscriptions" :key="subscription.userName" bordered flat
         class="row content-stretch items-center rounded-borders q-mb-xs">
-        <div class="col-grow bg-grey-1">
+        <div class="col-grow bg-grey-1" :set="subscription.userNameBefore = subscription.userName">
           <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense
             stack-label />
         </div>
         <div class="col-6" dense>
-          <q-input v-model="subscription.comment" :label="$t('comment')"
-            @change="updateSubscription(userNameBefore, subscription)" @focus="store.suspendUpdate" class="q-pl-sm"
-            borderless dense stack-label />
+          <q-input v-model="subscription.comment" :label="$t('comment')" :debounce="AUTO_SAVE_MILLISECONDS"
+            @change="updateSubscription(subscription.userNameBefore, subscription)" @focus="store.suspendUpdate"
+            class="q-pl-sm" borderless dense stack-label />
         </div>
         <div class="col-8" dense>
           <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
@@ -27,12 +26,12 @@
         <q-card class="row content-stretch items-center rounded-borders" bordered flat>
           <div class="col-6">
             <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm" lazy-rules
-              :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]" @blur="resetValidation"
-              borderless dense stack-label />
+              hide-bottom-space :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]"
+              @blur="resetValidation" borderless dense stack-label />
           </div>
           <div class="col-6" dense>
-            <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" lazy-rules :rules="[true]"
-              borderless dense stack-label @focus="store.suspendUpdate" />
+            <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" borderless dense stack-label
+              @focus="store.suspendUpdate" />
           </div>
           <div class="col-8" dense>
             <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense
@@ -52,11 +51,12 @@
 
 <script>
 import { useQuasar } from 'quasar';
-import { ref, watch } from 'vue';
+import { ref, watch, toRaw } from 'vue';
 import { apiStore } from 'stores/apiStore';
 import { useI18n } from 'vue-i18n';
 
 const MIN_USERNAME_LENGTH = 2;
+const AUTO_SAVE_MILLISECONDS = 1500;
 
 export default {
   props: {
@@ -102,12 +102,12 @@ export default {
       }
     }
 
-    function updateSubscription(userNameBefore, subscription) {
+    async function updateSubscription(userNameBefore, subscription) {
       if (subscription.state.value) {
         // unmap select options
         subscription.state = subscription.state.value;
       }
-      store.updateSubscription(props.entry._id, userNameBefore, subscription);
+      await store.updateSubscription(props.entry._id, userNameBefore, subscription);
     }
 
     async function addSubscription() {
@@ -143,12 +143,27 @@ export default {
       resetNewSubscription();
     });
 
+    watch(subscriptions, () => {
+      // blur all inputs on changes -> force @change events
+      Array.from(document.querySelectorAll('input')).forEach(el => el.blur());
+    }, {
+      deep: true
+    });
+
+    watch(store.entries, () => {
+      const myEntry = toRaw(store.entries).find((entry) => entry._id === props.entry._id);
+      if (myEntry) {
+        subscriptions.value = myEntry.subscriptions;
+      }
+    });
+
     buildSubscriptionStates();
     resetNewSubscription();
 
     return {
       newSubscriptionForm,
       MIN_USERNAME_LENGTH,
+      AUTO_SAVE_MILLISECONDS,
       errorMessage,
       get nameTooShort() { return t('minCharacters').replace('%s', MIN_USERNAME_LENGTH); },
       entryId: props.entry._id,
