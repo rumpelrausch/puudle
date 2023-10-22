@@ -2,7 +2,7 @@
   <q-banner v-if="store.currentErrorMessage.length > 0" class="bg-negative text-white">
     {{ store.currentErrorMessage }}
   </q-banner>
-  <q-page class="flex flex-center vertical-top q-px-xs">
+  <q-page class="flex flex-center vertical-top q-px-xs non-selectable">
     <eventTimeLine></eventTimeLine>
   </q-page>
 </template>

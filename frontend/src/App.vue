@@ -1,5 +1,5 @@
 <template>
-  <q-ajax-bar ref="bar" position="bottom" :hijack-filter="store.getHijackFilter"/>
+  <q-ajax-bar ref="bar" position="top" size="0.5rem" color="info" :hijack-filter="store.getHijackFilter"/>
   <router-view />
 </template>
 

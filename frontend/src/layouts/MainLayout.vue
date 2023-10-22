@@ -1,8 +1,8 @@
 <template>
   <div class="bg-blue-grey-2">
-    <q-layout view="hHh lpR fFf" class="layout-container">
+    <q-layout view="hHh lpR fFf" class="layout-container non-selectable">
 
-      <q-header elevated class="bg-primary text-white">
+      <q-header elevated class="bg-blue-grey-6 text-white">
         <q-toolbar class="layout-container">
           <q-toolbar-title>
             {{ $t('mainTitle') }}
