@@ -1,8 +1,8 @@
 const entryModel = require('../model/entryModel');
 
-const getEntryList = async () => {
+const getEntryList = async (requestParams) => {
     const entry = new entryModel();
-    return await entry.list();
+    return await entry.list(requestParams.fromDate);
 };
 
 const addEntry = async (entryData) => {
@@ -14,9 +14,9 @@ const addEntry = async (entryData) => {
 const updateEntry = async (entryData) => {
     const entry = new entryModel();
     const updatedEntry = await entry.update(entryData);
-    return { 
+    return {
         updatedEntry
-     };
+    };
 };
 
 const getEntry = async (entryId) => {

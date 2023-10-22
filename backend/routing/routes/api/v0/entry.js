@@ -7,7 +7,7 @@ const entryController = require('../../../../controller/entryController');
 module.exports = (app, route, invokeController) => {
     app.route(route)
         .get(async (req, res, next) => {
-            invokeController(entryController.getEntryList, undefined, res, next);
+            invokeController(entryController.getEntryList, req.query, res, next);
         })
         .post(async (req, res, next) => {
             invokeController(entryController.addEntry, req.body, res, next);

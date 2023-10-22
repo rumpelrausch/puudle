@@ -116,12 +116,11 @@ class EntryModel {
         return !!await db.findOneAsync(query);
     }
 
-    async list(withPastEntries = false) {
+    async list(fromDate) {
         db.sync();
         let query = { type: this.#type };
-        if(!withPastEntries) {
-            const now = new Date();
-            query.date = { $gte: now.toISOString().split('T')[0] };
+        if(fromDate) {
+            query.date = { $gte: fromDate };
         }
         return db.findAsync(query);
     }
