@@ -1,5 +1,11 @@
 <template>
-  <q-btn icon="bi-plus-square" color="green-4" dense ripple flat @click="showState = true" />
+  <q-btn color="green-4" @click="showState = true" class="q-mt-sm" padding="sm" dense no-caps ripple>
+    <q-icon name="library_add" />
+    <q-separator vertical spaced color="white" />
+    <div>
+      {{ $t('titleAddEvent') }}
+    </div>
+  </q-btn>
   <q-dialog v-model="showState">
     <q-card>
       <q-card-section class="row items-center q-pb-none">
@@ -24,7 +30,8 @@
                 <template v-slot:prepend>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date v-model="myEvent.date" :locale="myLocale" :mask="$t('dateFormatPretty')" emit-immediately minimal>
+                      <q-date v-model="myEvent.date" :locale="myLocale" :mask="$t('dateFormatPretty')" emit-immediately
+                        minimal>
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup icon="bi-check2-square" color="primary" />
                         </div>

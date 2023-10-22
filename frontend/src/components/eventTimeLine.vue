@@ -1,18 +1,21 @@
 <template>
-  <newEvent></newEvent>
-  <q-timeline layout="loose">
-    <q-timeline-entry v-for="(entry, key) in entries" :key="entry._id" :title="entry.entryName"
-      :side="key % 2 === 0 ? 'left' : 'right'">
-      <div class="q-mb-xl" :set="parsedDate = getParsedDate(entry.date)">
-        {{ parsedDate.prettyDate }} - {{ parsedDate.dayDiffString }}
-        <q-btn icon="bi-trash" color="red-4" v-if="isAdmin" @click="store.deleteEntry(entry._id)" dense ripple flat />
-        <div class="non-selectable">
-          <subscriptionList :entry="entry">
-          </subscriptionList>
+  <div class="self-start flex flex-center">
+    <newEvent></newEvent>
+    <q-timeline layout="loose">
+      <q-timeline-entry v-for="(entry, key) in entries" :key="entry._id" :title="entry.entryName"
+        icon="group" color="grey-6" class="non-selectable"
+        :side="key % 2 === 0 ? 'left' : 'right'">
+        <div class="q-mb-xl" :set="parsedDate = getParsedDate(entry.date)">
+          {{ parsedDate.prettyDate }} - {{ parsedDate.dayDiffString }}
+          <q-btn icon="bi-trash" color="red-4" v-if="isAdmin" @click="store.deleteEntry(entry._id)" dense ripple flat />
+          <div class="non-selectable">
+            <subscriptionList :entry="entry">
+            </subscriptionList>
+          </div>
         </div>
-      </div>
-    </q-timeline-entry>
-  </q-timeline>
+      </q-timeline-entry>
+    </q-timeline>
+  </div>
 </template>
 
 <script>
