@@ -5,6 +5,7 @@ import { date } from 'quasar';
 const URL_API = process.env.DEV ? 'http://localhost:8080/api/v0' : '/api/v0';
 const POLL_INTERVAL_MS = 2000;
 const DELAYED_POLL_MS = 15000;
+const GET_ONLY_CURRENT_ENTRIES = true;
 
 let isPollAllowed = true;
 let updateTimer;
@@ -20,7 +21,8 @@ async function poll(force = false) {
     return null;
   }
   duringPoll = !force;
-  const response = await axios.get(`${URL_API}/entry`);
+  const params = GET_ONLY_CURRENT_ENTRIES ? { fromDate: convertRealDateToDB(new Date()) } : {};
+  const response = await axios.get(`${URL_API}/entry`, { params });
   duringPoll = false;
   if (!response) {
     return null;
