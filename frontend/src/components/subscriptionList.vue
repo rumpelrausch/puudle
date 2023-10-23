@@ -172,7 +172,7 @@ export default {
     });
 
     watch(store.entriesStamp, () => {
-      const myEntry = toRaw(store.entries).find((entry) => entry._id === props.entry._id);
+      const myEntry = toRaw(store.getEntryById(props.entry._id));
       if (myEntry) {
         subscriptions.value = myEntry.subscriptions;
       }
