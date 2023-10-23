@@ -32,7 +32,10 @@ async function poll(force = false) {
     return null;
   }
   duringPoll = !force;
-  const params = GET_ONLY_CURRENT_ENTRIES ? { fromDate: convertRealDateToDB(new Date()) } : {};
+  const today = new Date();
+  today.setHours(0);
+  today.setMinutes(0);
+  const params = GET_ONLY_CURRENT_ENTRIES ? { fromDate: convertRealDateToDB(today) } : {};
   const response = await axios.get(`${URL_API}/entry`, { params });
   duringPoll = false;
   if (!response) {

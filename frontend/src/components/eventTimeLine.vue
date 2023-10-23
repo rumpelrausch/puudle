@@ -11,7 +11,13 @@
         </template>
         <div :set="parsedDate = getParsedDate(entry.date)">
           <div class="text-subtitle2 text-primary">
-            {{ parsedDate.prettyDate }} - {{ parsedDate.dayDiffString }}
+            {{ parsedDate.prettyDate }}
+            <q-chip>
+              {{ parsedDate.dayDiffString }}
+            </q-chip>
+            <q-btn icon="bi-trash" color="negative" v-if="isAdmin || entry.secondsOld <= MAX_ENTRY_AGE_FOR_DELETION"
+            class="float-right"
+            @click="store.deleteEntry(entry._id)" dense ripple flat />
           </div>
           <q-badge v-if="entry.numOfConfirmed > 0" color="positive" align="top" outline >
            {{ $tm('subscriptionStates.confirmed') }}:&nbsp;&nbsp;{{ entry.numOfConfirmed }}
@@ -19,8 +25,6 @@
            <q-icon name="bi-person" v-if="entry.numOfConfirmed === 1"/>
            <q-icon name="bi-people" v-if="entry.numOfConfirmed > 1"/>
           </q-badge>
-          <q-btn icon="bi-trash" color="negative" v-if="isAdmin || entry.secondsOld <= MAX_ENTRY_AGE_FOR_DELETION"
-            @click="store.deleteEntry(entry._id)" dense ripple flat />
           <div class="non-selectable">
             <subscriptionList :entry="entry">
             </subscriptionList>
@@ -52,7 +56,7 @@ import newEvent from 'components/newEvent.vue';
 
 const MAX_ENTRY_AGE_FOR_DELETION = 180;
 
-const isAdmin = false;
+const isAdmin = true;
 
 export default {
   components: {

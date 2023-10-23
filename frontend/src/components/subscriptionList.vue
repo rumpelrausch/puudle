@@ -54,7 +54,7 @@
             @focus="store.suspendUpdate" />
         </div>
         <div class="col" dense>
-          <q-btn type="submit" icon="bi-floppy" color="positive" class="float-right" dense ripple flat />
+          <q-btn type="submit" icon="bi-plus-square" color="positive" class="float-right" dense ripple flat />
         </div>
         <q-banner v-if="errorMessage.length > 0" class="bg-negative text-white">
           {{ errorMessage }}
