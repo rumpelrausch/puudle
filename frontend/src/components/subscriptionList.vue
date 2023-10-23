@@ -2,7 +2,7 @@
   <div class="non-selectable">
     <q-card v-for="subscription in subscriptions" :key="subscription.userName" bordered flat
       class="row content-stretch items-center rounded-borders q-mb-xs">
-      <div class="col-8 bg-grey-1" :set="subscription.userNameBefore = subscription.userName">
+      <div class="col-8 bg-disabled" :set="subscription.userNameBefore = subscription.userName">
         <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense
           stack-label />
       </div>
@@ -25,7 +25,7 @@
           data-debounce="1" class="q-pl-sm" borderless dense stack-label />
       </div>
       <div class="col" dense>
-        <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(subscription.userNameBefore)" class="float-right" dense
+        <q-btn icon="bi-trash" color="negative" @click="confirmDelete(subscription.userNameBefore)" class="float-right" dense
           ripple flat />
       </div>
     </q-card>
@@ -53,7 +53,7 @@
             @focus="store.suspendUpdate" />
         </div>
         <div class="col" dense>
-          <q-btn type="submit" icon="bi-floppy" color="green-4" class="float-right" dense ripple flat />
+          <q-btn type="submit" icon="bi-floppy" color="positive" class="float-right" dense ripple flat />
         </div>
         <q-banner v-if="errorMessage.length > 0" class="bg-negative text-white">
           {{ errorMessage }}
@@ -62,6 +62,12 @@
     </q-form>
   </div>
 </template>
+
+<style>
+div {
+  user-select: none !important;
+}
+</style>
 
 <script>
 import { useQuasar } from 'quasar';
@@ -91,10 +97,10 @@ export default {
     function buildSubscriptionStates() {
       subscriptionStates.value.length = 0;
       [
-        ['suggested', 'bi-person-raised-hand', 'blue-4'],
-        ['confirmed', 'bi-check-lg', 'green-4'],
-        ['rejected', 'bi-ban', 'red-4'],
-        ['maybe', 'bi-question-lg', 'orange-4']
+        ['suggested', 'bi-person-raised-hand', 'info'],
+        ['confirmed', 'bi-check-lg', 'positive'],
+        ['rejected', 'bi-ban', 'negative'],
+        ['maybe', 'bi-question-lg', 'warning']
       ].forEach((state) => {
         subscriptionStates.value.push(({
           value: state[0],

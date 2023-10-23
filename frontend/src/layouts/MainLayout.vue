@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-blue-grey-2">
+  <div>
     <q-layout view="hHh lpR fFf" class="layout-container non-selectable">
 
-      <q-header elevated class="bg-blue-grey-6 text-white">
+      <q-header elevated class="bg-primary text-white">
         <q-toolbar class="layout-container">
           <q-toolbar-title>
             {{ $t('mainTitle') }}
@@ -13,7 +13,7 @@
 
       <q-space />
 
-      <q-page-container class="layout-container bg-grey-1 shadow-2">
+      <q-page-container class="layout-container bg-back shadow-2">
         <router-view />
       </q-page-container>
 

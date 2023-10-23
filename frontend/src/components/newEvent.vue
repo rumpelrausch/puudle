@@ -1,5 +1,5 @@
 <template>
-  <q-btn color="green-4" @click="showState = true" class="q-mt-sm" padding="sm" dense no-caps ripple>
+  <q-btn color="positive" @click="showState = true" class="q-mt-sm" padding="sm" dense no-caps ripple>
     <q-icon name="library_add" />
     <q-separator vertical spaced color="white" />
     <div>
@@ -56,7 +56,7 @@
             </div>
           </div>
           <div>
-            <q-btn icon="bi-floppy" type="submit" color="green-4" dense ripple />
+            <q-btn icon="bi-floppy" type="submit" color="positive" dense ripple />
           </div>
         </q-form>
       </q-card-section>
