@@ -11,13 +11,19 @@
           <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
             standout="bg-primary text-white"
             @update:model-value="updateSubscription(subscription.userNameBefore, subscription)"
-            @focus="store.suspendUpdate" />
+            @focus="store.suspendUpdate">
+            <template v-slot:selected-item="scope">
+                <q-avatar size="sm" :color="scope.opt.color" text-color="white" :icon="scope.opt.icon" />
+                <div class="q-ml-sm">
+                  {{ scope.opt.label }}
+                </div>
+              </template>
+          </q-select>
         </div>
         <div class="col-6" dense>
           <q-input v-model="subscription.comment" :label="$t('comment')" :debounce="AUTO_SAVE_MILLISECONDS"
             @change="updateSubscription(subscription.userNameBefore, subscription)" @focus="store.suspendUpdate"
-            data-debounce="1"
-            class="q-pl-sm" borderless dense stack-label />
+            data-debounce="1" class="q-pl-sm" borderless dense stack-label />
         </div>
         <div class="col" dense>
           <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(subscription.userNameBefore)" class="float-right"
@@ -33,7 +39,15 @@
           </div>
           <div class="col-4" dense>
             <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense
-              standout="bg-primary text-white" @focus="store.suspendUpdate" />
+              standout="bg-primary text-white" @focus="store.suspendUpdate">
+              <template v-slot:selected>
+                <q-avatar size="sm" :color="newSubscription.state.color" text-color="white"
+                  :icon="newSubscription.state.icon" />
+                <div class="q-ml-sm">
+                  {{ newSubscription.state.label }}
+                </div>
+              </template>
+            </q-select>
           </div>
           <div class="col-6" dense>
             <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" borderless dense stack-label
@@ -79,14 +93,16 @@ export default {
     function buildSubscriptionStates() {
       subscriptionStates.value.length = 0;
       [
-        'suggested',
-        'confirmed',
-        'rejected',
-        'maybe'
-      ].forEach((key) => {
+        ['suggested', 'bi-person-raised-hand', 'blue-4'],
+        ['confirmed', 'bi-check-lg', 'green-4'],
+        ['rejected', 'bi-ban', 'red-4'],
+        ['maybe', 'bi-question-lg', 'orange-4']
+      ].forEach((state) => {
         subscriptionStates.value.push(({
-          value: key,
-          label: t(`subscriptionStates.${key}`)
+          value: state[0],
+          label: t(`subscriptionStates.${state[0]}`),
+          icon: state[1],
+          color: state[2]
         }));
       });
     }
