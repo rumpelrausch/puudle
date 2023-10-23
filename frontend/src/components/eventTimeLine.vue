@@ -1,7 +1,7 @@
 <template>
   <div class="self-start flex flex-center">
     <newEvent></newEvent>
-    <q-timeline>
+    <q-timeline class="q-ml-sm">
       <q-timeline-entry v-for="entry in entries" :key="entry._id" xsubtitle="entry.entryName" icon="group" color="grey-6"
         class="non-selectable">
         <template v-slot:subtitle>

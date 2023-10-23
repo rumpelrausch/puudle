@@ -35,7 +35,7 @@
 }
 
 .layout-container {
-  max-width: 60rem;
+  max-width: 50rem;
   margin: auto;
 }
 </style>

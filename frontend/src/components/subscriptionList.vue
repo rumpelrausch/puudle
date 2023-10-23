@@ -7,20 +7,20 @@
           <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense
             stack-label />
         </div>
-        <div class="col-4" dense>
+        <div class="col-grow non-selectable" dense>
           <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
-            standout="bg-primary text-white"
+            standout="bg-primary text-white" hide-dropdown-icon
             @update:model-value="updateSubscription(subscription.userNameBefore, subscription)"
             @focus="store.suspendUpdate">
             <template v-slot:selected-item="scope">
-                <q-avatar size="sm" :color="scope.opt.color" text-color="white" :icon="scope.opt.icon" />
-                <div class="q-ml-sm">
-                  {{ scope.opt.label }}
-                </div>
-              </template>
+              <q-avatar size="sm" :color="scope.opt.color" text-color="white" :icon="scope.opt.icon" />
+              <div class="q-ml-sm non-selectable">
+                {{ scope.opt.label }}
+              </div>
+            </template>
           </q-select>
         </div>
-        <div class="col-6" dense>
+        <div class="col-10" dense>
           <q-input v-model="subscription.comment" :label="$t('comment')" :debounce="AUTO_SAVE_MILLISECONDS"
             @change="updateSubscription(subscription.userNameBefore, subscription)" @focus="store.suspendUpdate"
             data-debounce="1" class="q-pl-sm" borderless dense stack-label />
@@ -37,19 +37,19 @@
               hide-bottom-space :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]"
               @blur="resetValidation" borderless dense stack-label />
           </div>
-          <div class="col-4" dense>
-            <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense
+          <div class="col-grow non-selectable" dense>
+            <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense hide-dropdown-icon
               standout="bg-primary text-white" @focus="store.suspendUpdate">
               <template v-slot:selected>
                 <q-avatar size="sm" :color="newSubscription.state.color" text-color="white"
                   :icon="newSubscription.state.icon" />
-                <div class="q-ml-sm">
+                <div class="q-ml-sm non-selectable">
                   {{ newSubscription.state.label }}
                 </div>
               </template>
             </q-select>
           </div>
-          <div class="col-6" dense>
+          <div class="col-10" dense>
             <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" borderless dense stack-label
               @focus="store.suspendUpdate" />
           </div>
