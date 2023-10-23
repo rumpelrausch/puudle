@@ -5,7 +5,7 @@
       <q-header elevated class="bg-primary text-white">
         <q-toolbar class="layout-container">
           <q-toolbar-title>
-            {{ $t('mainTitle') }}
+            {{ $q.config.customEnv.APPNAME }} - {{ $t('slogan') }}
           </q-toolbar-title>
           <langSwitcher class="langSwitcher"></langSwitcher>
         </q-toolbar>

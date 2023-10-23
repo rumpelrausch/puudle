@@ -1,5 +1,5 @@
 export default {
-  mainTitle: 'Puudle: The appointment planner',
+  slogan: 'The appointment planner',
   dateFormatPretty: 'dddd, MMM D YYYY HH:mm', // american
   // dateFormatPretty: 'dddd, D MMM YYYY HH:mm', // british
   today: 'today',

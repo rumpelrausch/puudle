@@ -16,14 +16,13 @@
               {{ parsedDate.dayDiffString }}
             </q-chip>
             <q-btn icon="bi-trash" color="negative" v-if="isAdmin || entry.secondsOld <= MAX_ENTRY_AGE_FOR_DELETION"
-            class="float-right"
-            @click="store.deleteEntry(entry._id)" dense ripple flat />
+              class="float-right" @click="store.deleteEntry(entry._id)" dense ripple flat />
           </div>
-          <q-badge v-if="entry.numOfConfirmed > 0" color="positive" align="top" outline >
-           {{ $tm('subscriptionStates.confirmed') }}:&nbsp;&nbsp;{{ entry.numOfConfirmed }}
-           &nbsp;
-           <q-icon name="bi-person" v-if="entry.numOfConfirmed === 1"/>
-           <q-icon name="bi-people" v-if="entry.numOfConfirmed > 1"/>
+          <q-badge v-if="entry.numOfConfirmed > 0" color="positive" align="top" outline>
+            {{ $tm('subscriptionStates.confirmed') }}:&nbsp;&nbsp;{{ entry.numOfConfirmed }}
+            &nbsp;
+            <q-icon name="bi-person" v-if="entry.numOfConfirmed === 1" />
+            <q-icon name="bi-people" v-if="entry.numOfConfirmed > 1" />
           </q-badge>
           <div class="non-selectable">
             <subscriptionList :entry="entry">
@@ -41,13 +40,14 @@
   margin-bottom: -20px;
   opacity: 1;
 }
+
 .q-timeline__entry--icon .q-timeline__subtitle {
   padding-top: 4px;
 }
 </style>
 
 <script>
-import { date } from 'quasar';
+import { date, useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { apiStore } from 'stores/apiStore';
 import { storeToRefs } from 'pinia';
@@ -56,14 +56,14 @@ import newEvent from 'components/newEvent.vue';
 
 const MAX_ENTRY_AGE_FOR_DELETION = 180;
 
-const isAdmin = true;
-
 export default {
   components: {
     subscriptionList,
     newEvent
   },
   setup() {
+    const $q = useQuasar();
+    const isAdmin = $q.config.customEnv.IS_ADMIN;
     const store = apiStore();
     const { entries } = storeToRefs(store);
     const { t, tm } = useI18n();

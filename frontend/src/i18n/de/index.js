@@ -1,5 +1,5 @@
 export default {
-  mainTitle: 'Puudle: Der Verabredungsplaner',
+  slogan: 'Der Verabredungsplaner',
   dateFormatPretty: 'dddd DD.MM.YY - HH:mm',
   today: 'heute',
   tomorrow: 'morgen',

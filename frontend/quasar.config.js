@@ -3,6 +3,7 @@
 /* eslint global-require: 0 */
 
 const { configure } = require('quasar/wrappers');
+const DotEnv = require('dotenv');
 
 module.exports = configure((/* ctx */) => ({
   eslint: {
@@ -40,7 +41,7 @@ module.exports = configure((/* ctx */) => ({
 
   devServer: {
     open: false,
-    port: 8081
+    port: 8081,
   },
 
   framework: {
@@ -60,7 +61,8 @@ module.exports = configure((/* ctx */) => ({
         negative: '#e57373',
         info: '#49b3e4',
         warning: '#ffb74d'
-      }
+      },
+      customEnv: DotEnv.config({ path: '../.env.customize' }).parsed,
     },
 
     plugins: [

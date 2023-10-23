@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import { date } from 'quasar';
+import { date, useQuasar } from 'quasar';
 
 const URL_API = process.env.DEV ? 'http://localhost:8080/api/v0' : '/api/v0';
-const POLL_INTERVAL_MS = 2000;
-const DELAYED_POLL_MS = 15000;
-const GET_ONLY_CURRENT_ENTRIES = true;
+
+let POLL_INTERVAL_MS;
+let DELAYED_POLL_MS;
+let GET_ONLY_CURRENT_ENTRIES;
 
 let isPollAllowed = true;
 let updateTimer;
@@ -47,6 +48,11 @@ async function poll(force = false) {
 export const apiStore = () => {
   const innerStore = defineStore('counter', {
     state: () => {
+      const env = useQuasar().config.customEnv;
+      POLL_INTERVAL_MS = env.POLL_INTERVAL_MS || 2000;
+      DELAYED_POLL_MS = env.DELAYED_POLL_MS || 15000;
+      GET_ONLY_CURRENT_ENTRIES = !!env.GET_ONLY_CURRENT_ENTRIES;
+
       return {
         entries: [],
         entriesStamp: [0],
