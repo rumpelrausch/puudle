@@ -1,7 +1,6 @@
 <template>
   <q-select v-model="locale" :options="localeOptions" dense borderless emit-value map-options options-dense
-    hide-bottom-space rounded
-  />
+    hide-bottom-space rounded />
 </template>
 
 <script>
@@ -14,7 +13,8 @@ export default {
     return {
       locale,
       localeOptions: [
-        { value: 'en-US', label: 'English' },
+        { value: 'en-GB', label: 'English (GB)' },
+        { value: 'en-US', label: 'English (US)' },
         { value: 'de', label: 'Deutsch' }
       ]
     };
