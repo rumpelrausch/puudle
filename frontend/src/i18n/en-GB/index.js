@@ -18,7 +18,7 @@ export default {
   minCharacters: 'Please enter at least %s characters.',
   pleaseChoose: 'Please make a choice',
   comment: 'Comment',
-  deleteSubscription: 'Delete entry for "%s" ?',
+  deleteSubscription: 'Delete whole entry for "%s" ?',
   ok: 'OK',
   cancel: 'Cancel',
   date: {

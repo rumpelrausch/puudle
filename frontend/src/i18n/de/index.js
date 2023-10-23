@@ -17,7 +17,7 @@ export default {
   minCharacters: 'Bitte mindestens %s Zeichen eingeben.',
   pleaseChoose: 'Bitte auswählen',
   comment: 'Kommentar',
-  deleteSubscription: 'Eintrag für "%s" löschen?',
+  deleteSubscription: 'Gesamten Eintrag für "%s" löschen?',
   ok: 'OK',
   cancel: 'Abbrechen',
   date: {
