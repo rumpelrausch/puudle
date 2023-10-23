@@ -3,7 +3,7 @@
     <q-card v-for="subscription in subscriptions" :key="subscription.userName" bordered flat
       class="row content-stretch items-center rounded-borders q-mb-xs">
       <div class="col-8 bg-disabled" :set="subscription.userNameBefore = subscription.userName">
-        <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense
+        <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense square
           stack-label />
       </div>
       <div class="col-grow non-selectable" dense>

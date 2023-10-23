@@ -21,6 +21,8 @@ function enrichEntries(entries) {
     entry.numOfConfirmed = entry.subscriptions.filter((subscription) => {
       return subscription.state === 'confirmed';
     }).length;
+    entry.subscriptions = entry.subscriptions
+      .sort((subscription) => subscription.state === 'confirmed' ? -1 : 1);
   }
   return entries;
 }
