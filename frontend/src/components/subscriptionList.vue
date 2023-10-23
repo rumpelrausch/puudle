@@ -33,11 +33,12 @@
       <q-card class="row content-stretch items-center rounded-borders" bordered flat>
         <div class="col-8">
           <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm q-pr-xl" lazy-rules
-            hide-bottom-space :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]"
-            @blur="resetValidation" borderless dense stack-label />
+            :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]"
+            @blur="resetValidation" borderless dense stack-label hide-bottom-space />
         </div>
         <div class="col-grow non-selectable" dense>
           <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense hide-dropdown-icon
+            lazy-rules :rules="[val => val && val.label && val.label.length > 0 || $t('pleaseChoose') ]"
             standout="bg-primary text-white" @focus="store.suspendUpdate">
             <template v-slot:selected>
               <q-avatar size="sm" :color="newSubscription.state.color" text-color="white"
@@ -114,7 +115,11 @@ export default {
     function resetNewSubscription() {
       newSubscription.value = {
         userName: '',
-        state: subscriptionStates.value[0],
+        state: {
+          label: '',
+          icon: 'expand_more',
+          color: 'secondary'
+        },
         comment: ''
       };
       resetValidation();

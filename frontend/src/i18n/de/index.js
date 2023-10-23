@@ -15,6 +15,7 @@ export default {
   titleAddEvent: 'Einladung erstellen',
   eventName: 'Was / wo?',
   minCharacters: 'Bitte mindestens %s Zeichen eingeben.',
+  pleaseChoose: 'Bitte auswählen',
   comment: 'Kommentar',
   deleteSubscription: 'Eintrag für "%s" löschen?',
   ok: 'OK',

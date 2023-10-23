@@ -16,3 +16,7 @@ html, body {
 .text-white {
     color: var(--q-white) !important;
 }
+
+.q-field--standout.q-field--highlighted .q-field__control {
+    background-color: var(--q-negative);
+}

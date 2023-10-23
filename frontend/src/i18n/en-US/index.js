@@ -15,6 +15,7 @@ export default {
   titleAddEvent: 'Create an invitation',
   eventName: 'What / where?',
   minCharacters: 'Please enter at least %s characters.',
+  pleaseChoose: 'Please make a choice',
   comment: 'Comment',
   deleteSubscription: 'Delete entry for "%s" ?',
   ok: 'OK',
