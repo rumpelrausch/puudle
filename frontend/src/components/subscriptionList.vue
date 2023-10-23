@@ -1,67 +1,65 @@
 <template>
-  <div class="q-mb-xl non-selectable">
-    <div class="xq-mb-xs">
-      <q-card v-for="subscription in subscriptions" :key="subscription.userName" bordered flat
-        class="row content-stretch items-center rounded-borders q-mb-xs">
-        <div class="col-8 bg-grey-1" :set="subscription.userNameBefore = subscription.userName">
-          <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense
-            stack-label />
+  <div class="non-selectable">
+    <q-card v-for="subscription in subscriptions" :key="subscription.userName" bordered flat
+      class="row content-stretch items-center rounded-borders q-mb-xs">
+      <div class="col-8 bg-grey-1" :set="subscription.userNameBefore = subscription.userName">
+        <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense
+          stack-label />
+      </div>
+      <div class="col-grow non-selectable" dense>
+        <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
+          standout="bg-primary text-white" hide-dropdown-icon
+          @update:model-value="updateSubscription(subscription.userNameBefore, subscription)"
+          @focus="store.suspendUpdate">
+          <template v-slot:selected-item="scope">
+            <q-avatar size="sm" :color="scope.opt.color" text-color="white" :icon="scope.opt.icon" />
+            <div class="q-ml-sm non-selectable">
+              {{ scope.opt.label }}
+            </div>
+          </template>
+        </q-select>
+      </div>
+      <div class="col-10" dense>
+        <q-input v-model="subscription.comment" :label="$t('comment')" :debounce="AUTO_SAVE_MILLISECONDS"
+          @change="updateSubscription(subscription.userNameBefore, subscription)" @focus="store.suspendUpdate"
+          data-debounce="1" class="q-pl-sm" borderless dense stack-label />
+      </div>
+      <div class="col" dense>
+        <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(subscription.userNameBefore)" class="float-right" dense
+          ripple flat />
+      </div>
+    </q-card>
+    <q-form ref="newSubscriptionForm" @submit="addSubscription">
+      <q-card class="row content-stretch items-center rounded-borders" bordered flat>
+        <div class="col-8">
+          <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm q-pr-xl" lazy-rules
+            hide-bottom-space :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]"
+            @blur="resetValidation" borderless dense stack-label />
         </div>
         <div class="col-grow non-selectable" dense>
-          <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
-            standout="bg-primary text-white" hide-dropdown-icon
-            @update:model-value="updateSubscription(subscription.userNameBefore, subscription)"
-            @focus="store.suspendUpdate">
-            <template v-slot:selected-item="scope">
-              <q-avatar size="sm" :color="scope.opt.color" text-color="white" :icon="scope.opt.icon" />
+          <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense hide-dropdown-icon
+            standout="bg-primary text-white" @focus="store.suspendUpdate">
+            <template v-slot:selected>
+              <q-avatar size="sm" :color="newSubscription.state.color" text-color="white"
+                :icon="newSubscription.state.icon" />
               <div class="q-ml-sm non-selectable">
-                {{ scope.opt.label }}
+                {{ newSubscription.state.label }}
               </div>
             </template>
           </q-select>
         </div>
         <div class="col-10" dense>
-          <q-input v-model="subscription.comment" :label="$t('comment')" :debounce="AUTO_SAVE_MILLISECONDS"
-            @change="updateSubscription(subscription.userNameBefore, subscription)" @focus="store.suspendUpdate"
-            data-debounce="1" class="q-pl-sm" borderless dense stack-label />
+          <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" borderless dense stack-label
+            @focus="store.suspendUpdate" />
         </div>
         <div class="col" dense>
-          <q-btn icon="bi-trash" color="red-4" @click="confirmDelete(subscription.userNameBefore)" class="float-right"
-            dense ripple flat />
+          <q-btn type="submit" icon="bi-floppy" color="green-4" class="float-right" dense ripple flat />
         </div>
+        <q-banner v-if="errorMessage.length > 0" class="bg-negative text-white">
+          {{ errorMessage }}
+        </q-banner>
       </q-card>
-      <q-form ref="newSubscriptionForm" @submit="addSubscription">
-        <q-card class="row content-stretch items-center rounded-borders" bordered flat>
-          <div class="col-8">
-            <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm q-pr-xl" lazy-rules
-              hide-bottom-space :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]"
-              @blur="resetValidation" borderless dense stack-label />
-          </div>
-          <div class="col-grow non-selectable" dense>
-            <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense hide-dropdown-icon
-              standout="bg-primary text-white" @focus="store.suspendUpdate">
-              <template v-slot:selected>
-                <q-avatar size="sm" :color="newSubscription.state.color" text-color="white"
-                  :icon="newSubscription.state.icon" />
-                <div class="q-ml-sm non-selectable">
-                  {{ newSubscription.state.label }}
-                </div>
-              </template>
-            </q-select>
-          </div>
-          <div class="col-10" dense>
-            <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" borderless dense stack-label
-              @focus="store.suspendUpdate" />
-          </div>
-          <div class="col" dense>
-            <q-btn type="submit" icon="bi-floppy" color="green-4" class="float-right" dense ripple flat />
-          </div>
-          <q-banner v-if="errorMessage.length > 0" class="bg-negative text-white">
-            {{ errorMessage }}
-          </q-banner>
-        </q-card>
-      </q-form>
-    </div>
+    </q-form>
   </div>
 </template>
 

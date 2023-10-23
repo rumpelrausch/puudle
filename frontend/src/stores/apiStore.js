@@ -16,6 +16,15 @@ function convertRealDateToDB(realDate) {
   return date.formatDate(realDate, 'YYYY-MM-DD HH:mm');
 }
 
+function enrichEntries(entries) {
+  for (const entry of entries) {
+    entry.numOfConfirmed = entry.subscriptions.filter((subscription) => {
+      return subscription.state === 'confirmed';
+    }).length;
+  }
+  return entries;
+}
+
 async function poll(force = false) {
   if (!force && !isPollAllowed) {
     return null;
@@ -76,7 +85,7 @@ export const apiStore = () => {
         if (!entries) {
           return;
         }
-        this.entries = entries;
+        this.entries = enrichEntries(entries);
         this.updateStamp();
       },
 

@@ -9,8 +9,16 @@
             {{ entry.entryName }}
           </div>
         </template>
-        <div class="q-mb-xl" :set="parsedDate = getParsedDate(entry.date)">
-          {{ parsedDate.prettyDate }} - {{ parsedDate.dayDiffString }}
+        <div :set="parsedDate = getParsedDate(entry.date)">
+          <div class="text-subtitle2">
+            {{ parsedDate.prettyDate }} - {{ parsedDate.dayDiffString }}
+          </div>
+          <q-badge v-if="entry.numOfConfirmed > 0" color="green-4" align="top">
+           {{ $tm('subscriptionStates.confirmed') }}:&nbsp;&nbsp;{{ entry.numOfConfirmed }}
+           &nbsp;
+           <q-icon name="bi-person" v-if="entry.numOfConfirmed === 1"/>
+           <q-icon name="bi-people" v-if="entry.numOfConfirmed > 1"/>
+          </q-badge>
           <q-btn icon="bi-trash" color="red-4" v-if="isAdmin || entry.secondsOld <= MAX_ENTRY_AGE_FOR_DELETION"
             @click="store.deleteEntry(entry._id)" dense ripple flat />
           <div class="non-selectable">
@@ -26,6 +34,8 @@
 <style>
 .q-timeline__subtitle {
   text-transform: none;
+  margin-bottom: -20px;
+  opacity: 1;
 }
 .q-timeline__entry--icon .q-timeline__subtitle {
   padding-top: 4px;
