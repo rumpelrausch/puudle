@@ -1,6 +1,6 @@
 export default {
   mainTitle: 'Puudle: Der Verabredungsplaner',
-  dateFormatPretty: 'DD.MM.YY - HH:mm',
+  dateFormatPretty: 'dddd DD.MM.YY - HH:mm',
   today: 'heute',
   tomorrow: 'morgen',
   inDays: 'in %s Tagen',

@@ -66,7 +66,7 @@ export default {
   setup() {
     const store = apiStore();
     const { entries } = storeToRefs(store);
-    const { t } = useI18n();
+    const { t, tm } = useI18n();
 
     store.startUpdate();
 
@@ -95,7 +95,7 @@ export default {
         const dayDiff = date.getDateDiff(realDateDay, new Date(), 'days');
         return {
           realDate,
-          prettyDate: date.formatDate(realDate, dateFormat),
+          prettyDate: date.formatDate(realDate, dateFormat, tm('date')),
           dayDiffString: this.getDayDiffString(dayDiff)
         };
       }

@@ -1,6 +1,7 @@
 export default {
   mainTitle: 'Puudle: The appointment planner',
-  dateFormatPretty: 'YYYY/MM/DD - HH:mm',
+  dateFormatPretty: 'dddd, MMM D YYYY HH:mm', // american
+  // dateFormatPretty: 'dddd, D MMM YYYY HH:mm', // british
   today: 'today',
   tomorrow: 'tomorrow',
   inDays: 'in %s days',
