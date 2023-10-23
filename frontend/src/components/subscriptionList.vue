@@ -2,11 +2,11 @@
   <div class="non-selectable">
     <q-card v-for="subscription in subscriptions" :key="subscription.userName" bordered flat
       class="row content-stretch items-center rounded-borders q-mb-xs">
-      <div class="col-8 bg-disabled" :set="subscription.userNameBefore = subscription.userName">
+      <div class="col-8 col-grow bg-disabled" :set="subscription.userNameBefore = subscription.userName">
         <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense square
           stack-label />
       </div>
-      <div class="col-grow non-selectable" dense>
+      <div class="col-4 col-grow non-selectable stateselect" dense>
         <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
           standout="bg-primary text-white" hide-dropdown-icon
           @update:model-value="updateSubscription(subscription.userNameBefore, subscription)"
@@ -36,7 +36,7 @@
             :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]"
             @blur="resetValidation" borderless dense stack-label hide-bottom-space />
         </div>
-        <div class="col-grow non-selectable" dense>
+        <div class="col-grow non-selectable stateselect" dense>
           <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense hide-dropdown-icon
             lazy-rules :rules="[val => val && val.label && val.label.length > 0 || $t('pleaseChoose') ]"
             standout="bg-primary text-white" @focus="store.suspendUpdate">
@@ -65,6 +65,9 @@
 </template>
 
 <style>
+.stateselect {
+  min-width: 12em !important;
+}
 div {
   user-select: none !important;
 }
