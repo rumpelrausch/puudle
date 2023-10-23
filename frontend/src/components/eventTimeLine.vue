@@ -1,13 +1,18 @@
 <template>
   <div class="self-start flex flex-center">
     <newEvent></newEvent>
-    <q-timeline xayout="loose">
-      <q-timeline-entry v-for="(entry, key) in entries" :key="entry._id" :subtitle="entry.entryName"
-        icon="group" color="grey-6" class="non-selectable"
-        :side="key % 2 === 0 ? 'left' : 'right'">
+    <q-timeline>
+      <q-timeline-entry v-for="entry in entries" :key="entry._id" xsubtitle="entry.entryName" icon="group" color="grey-6"
+        class="non-selectable">
+        <template v-slot:subtitle>
+          <div class="text-h5">
+            {{ entry.entryName }}
+          </div>
+        </template>
         <div class="q-mb-xl" :set="parsedDate = getParsedDate(entry.date)">
           {{ parsedDate.prettyDate }} - {{ parsedDate.dayDiffString }}
-          <q-btn icon="bi-trash" color="red-4" v-if="isAdmin || entry.secondsOld <= MAX_ENTRY_AGE_FOR_DELETION" @click="store.deleteEntry(entry._id)" dense ripple flat />
+          <q-btn icon="bi-trash" color="red-4" v-if="isAdmin || entry.secondsOld <= MAX_ENTRY_AGE_FOR_DELETION"
+            @click="store.deleteEntry(entry._id)" dense ripple flat />
           <div class="non-selectable">
             <subscriptionList :entry="entry">
             </subscriptionList>
@@ -17,6 +22,15 @@
     </q-timeline>
   </div>
 </template>
+
+<style>
+.q-timeline__subtitle {
+  text-transform: none;
+}
+.q-timeline__entry--icon .q-timeline__subtitle {
+  padding-top: 4px;
+}
+</style>
 
 <script>
 import { date } from 'quasar';
