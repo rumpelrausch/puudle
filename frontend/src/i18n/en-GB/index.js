@@ -20,6 +20,7 @@ export default {
   minCharacters: 'Please enter at least %s characters.',
   pleaseChoose: 'Please make a choice',
   comment: 'Comment',
+  deleteEntry: 'Delete the whole appointment?',
   deleteSubscription: 'Delete whole entry for "%s" ?',
   ok: 'OK',
   cancel: 'Cancel',

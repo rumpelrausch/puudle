@@ -2,8 +2,7 @@
   <div class="self-start flex flex-center">
     <newEvent></newEvent>
     <q-timeline class="q-ml-sm">
-      <q-timeline-entry v-for="entry in entries" :key="entry._id" icon="group" color="primary"
-        class="non-selectable">
+      <q-timeline-entry v-for="entry in entries" :key="entry._id" icon="group" color="primary" class="non-selectable">
         <template v-slot:subtitle>
           <div class="text-h5 text-primary">
             {{ entry.entryName }}
@@ -16,7 +15,7 @@
               {{ parsedDate.dayDiffString }}
             </q-chip>
             <q-btn icon="bi-trash" color="negative" v-if="isAdmin || entry.secondsOld <= ENTRY_DELETION_ALLOWED_SECONDS"
-              class="float-right" @click="store.deleteEntry(entry._id)" dense ripple flat />
+              class="float-right" @click="confirmDelete(entry._id)" dense ripple flat />
           </div>
           <q-badge v-if="entry.numOfConfirmed > 0" color="positive" align="top" outline>
             {{ $tm('subscriptionStates.confirmed') }}:&nbsp;&nbsp;{{ entry.numOfConfirmed }}
@@ -66,6 +65,15 @@ export default {
     const { entries } = storeToRefs(store);
     const { t, tm } = useI18n();
 
+    function confirmDelete(entryId) {
+      $q.dialog({
+        message: t('deleteEntry'),
+        cancel: t('cancel'),
+        ok: t('ok'),
+        focus: 'cancel'
+      }).onOk(() => store.deleteEntry(entryId));
+    }
+
     store.startUpdate();
 
     return {
@@ -73,6 +81,8 @@ export default {
       entries,
       isAdmin,
       ENTRY_DELETION_ALLOWED_SECONDS: $q.config.customEnv.ENTRY_DELETION_ALLOWED_SECONDS,
+
+      confirmDelete,
 
       getDayDiffString(dayDiff) {
         if (dayDiff === -1) {

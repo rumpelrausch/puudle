@@ -113,6 +113,8 @@ build without any protection.
 Credentials **may** be set inside the file `.env`. This is only
 recommended for local development.
 
+**Modification of the environment files needs service restart.**
+
 #### Configuration parameters
 
 | | |
@@ -169,4 +171,3 @@ or just `node backend/index.js.
 - Implement change watcher.
 - Implement Mailer.
 - document i18n.
-- Confirm entry deletion.
