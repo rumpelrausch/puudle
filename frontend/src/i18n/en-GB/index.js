@@ -2,6 +2,7 @@ export default {
   slogan: 'The appointment planner',
   // dateFormatPretty: 'dddd, MMM D YYYY HH:mm', // american
   dateFormatPretty: 'dddd, D MMM YYYY HH:mm', // british
+  yesterday: 'yesterday',
   today: 'today',
   tomorrow: 'tomorrow',
   inDays: 'in %s days',
