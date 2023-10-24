@@ -107,6 +107,9 @@ The file `.env.customize` contains customization parameters.
 Since it is part of the source code repository it **must never
 contain any credentials**.
 
+`.env.customize` settings are baked into the frontend application
+build without any protection.
+
 Credentials **may** be set inside the file `.env`. This is only
 recommended for local development.
 
@@ -115,10 +118,13 @@ recommended for local development.
 | | |
 |---|---|
 | APPNAME | The application name |
+| FRONTEND_DEV_PORT | TCP port the frontend server listens on (dev only) |
+| BACKEND_PORT | TCP port the backend server listens on (dev, staging and production) |
 | IS_ADMIN | Allows deletion of event entries if set |
 | POLL_INTERVAL_MS | Frontend to backend polling interval |
 | DELAYED_POLL_MS | Focus on an input in frontend pauses the poll for this given time |
 | GET_ONLY_CURRENT_ENTRIES | Only shows event entries starting from today |
+| DB_PERSIST_DAYS | Entries are deleted if older |
 
 #### Credentials
 (via environment variables or from the `.env` file)
@@ -159,7 +165,7 @@ or just `node backend/index.js.
 
 ## TODO
 
-- Make frontend dev port configurable.
-- Make backend port configurable.
 - Implement change watcher.
 - Implement Mailer.
+- Persist by entry date, not createdAt
+- document i18n
