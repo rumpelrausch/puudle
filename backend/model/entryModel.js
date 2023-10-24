@@ -125,6 +125,12 @@ class EntryModel {
     return db.findAsync(query);
   }
 
+  async getLatestUpdated() {
+    let query = { type: this.#type };
+    const results = await db.findAsync(query);
+    return results.sort((a, b) => a.updatedAt < b.updatedAt ? 1 : -1)[0];
+  }
+
   get document() { return this.#document; }
 }
 

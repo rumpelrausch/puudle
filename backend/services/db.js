@@ -16,7 +16,7 @@ const sync = () => {
   db.persistence.compactDatafile();
 };
 
-const persistDays = (days) => {
+const persistDays = (/** @type {number} */ days) => {
   db.ensureIndex({ fieldName: 'dateObject', expireAfterSeconds: days * 86400 }, err => { });
 };
 
@@ -42,9 +42,9 @@ const findAsync = (query, projection = {}) => {
   });
 };
 
-const updateAsync = (query, newData) => {
+const updateAsync = (query, newData, options = {}) => {
   return new Promise((resolve) => {
-    db.update(query, newData, (err, doc) => {
+    db.update(query, newData, options, (err, doc) => {
       if (err) {
         throw new Error(err);
       }

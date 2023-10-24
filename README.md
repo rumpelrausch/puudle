@@ -168,6 +168,8 @@ or just `node backend/index.js.
 
 ## TODO
 
-- Implement change watcher.
+- Implement change watcher throttling.
+- Implement change watcher details extraction (added, deleted, modified etc.)
+- Implement backend i18n (or email subject/body settings)
 - Implement Mailer.
 - document i18n.
