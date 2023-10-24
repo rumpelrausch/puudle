@@ -17,9 +17,6 @@
         <q-form @submit="onSubmit">
           <div class="row">
             <div class="column q-mr-sm q-mb-sm">
-              <!-- <q-input v-model="myEvent.entryName" :label="$t('eventName')" lazy-rules
-                :rules="[val => val && val.length >= MIN_ENTRY_NAME_LENGTH || nameTooShort]" outlined dense autofocus stack-label>
-              </q-input> -->
               <q-select :model-value="myEvent.entryName" :label="$t('eventName')" :options="$tm('eventSuggestions')"
                 lazy-rules :rules="[val => val && val.length >= MIN_ENTRY_NAME_LENGTH || nameTooShort]"
                 @input-value="setEntryName" use-input fill-input hide-selected outlined dense stack-label>
@@ -92,7 +89,7 @@ export default {
 
     function reset() {
       myEvent.value.entryName = '';
-      myEvent.value.date = date.formatDate(today, t('dateFormatPretty'));
+      myEvent.value.date = date.formatDate(today, t('dateFormatPretty'), tm('date'));
       errorMessage.value = '';
     }
 
@@ -112,7 +109,8 @@ export default {
         myEvent.value.entryName = val;
       },
       async onSubmit() {
-        const realDate = date.extractDate(myEvent.value.date, t('dateFormatPretty'));
+        console.log(myEvent.value);
+        const realDate = date.extractDate(myEvent.value.date, t('dateFormatPretty'), tm('date'));
         await store.addEntry(myEvent.value.entryName, realDate)
           .then(() => { showState.value = false; })
           .catch(error => {
