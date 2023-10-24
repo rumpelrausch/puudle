@@ -5,6 +5,7 @@ export default {
   today: 'today',
   tomorrow: 'tomorrow',
   inDays: 'in %s days',
+  daysAgo: '%s days ago',
   userName: 'Name',
   subscriptionStates: {
     suggested: 'suggested',

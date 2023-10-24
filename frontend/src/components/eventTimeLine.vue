@@ -77,11 +77,17 @@ export default {
       MAX_ENTRY_AGE_FOR_DELETION,
 
       getDayDiffString(dayDiff) {
+        if (dayDiff === -1) {
+          return t('yesterday');
+        }
         if (dayDiff === 0) {
           return t('today');
         }
         if (dayDiff === 1) {
           return t('tomorrow');
+        }
+        if (dayDiff < 0) {
+          return t('daysAgo').replace('%s', (-dayDiff).toString());
         }
         return t('inDays').replace('%s', dayDiff.toString());
       },

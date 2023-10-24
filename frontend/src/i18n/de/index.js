@@ -1,9 +1,11 @@
 export default {
   slogan: 'Der Verabredungsplaner',
   dateFormatPretty: 'dddd DD.MM.YY - HH:mm',
+  yesterday: 'gestern',
   today: 'heute',
   tomorrow: 'morgen',
   inDays: 'in %s Tagen',
+  daysAgo: 'vor %s Tagen',
   userName: 'Name',
   subscriptionStates: {
     suggested: 'vorgeschlagen',
