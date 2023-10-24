@@ -125,6 +125,7 @@ recommended for local development.
 | DELAYED_POLL_MS | Focus on an input in frontend pauses the poll for this given time |
 | GET_ONLY_CURRENT_ENTRIES | Only shows event entries starting from today |
 | DB_PERSIST_DAYS | Entries are deleted if older |
+| ENTRY_DELETION_ALLOWED_SECONDS | How long a new entry is allowed to be deleted |
 
 #### Credentials
 (via environment variables or from the `.env` file)
@@ -168,4 +169,4 @@ or just `node backend/index.js.
 - Implement change watcher.
 - Implement Mailer.
 - document i18n.
-- Make MAX_ENTRY_AGE_FOR_DELETION configurable.
+- Confirm entry deletion.
