@@ -167,5 +167,5 @@ or just `node backend/index.js.
 
 - Implement change watcher.
 - Implement Mailer.
-- Persist by entry date, not createdAt
-- document i18n
+- document i18n.
+- Make MAX_ENTRY_AGE_FOR_DELETION configurable.

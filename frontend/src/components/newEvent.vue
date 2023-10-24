@@ -109,7 +109,6 @@ export default {
         myEvent.value.entryName = val;
       },
       async onSubmit() {
-        console.log(myEvent.value);
         const realDate = date.extractDate(myEvent.value.date, t('dateFormatPretty'), tm('date'));
         await store.addEntry(myEvent.value.entryName, realDate)
           .then(() => { showState.value = false; })
