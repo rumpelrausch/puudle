@@ -206,6 +206,5 @@ you'd probably not want to advertise your installation to the public.
 
 ## TODO
 
-- Document i18n.
 - Allow email templates.
 - Create Logger.
