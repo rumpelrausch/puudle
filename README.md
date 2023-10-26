@@ -215,9 +215,3 @@ Inside the key starting with 'puudle-' these JSON encoded values are used:
 
 This may or may not be a GDPR issue. There's no imprint either, so
 you'd probably not want to advertise your installation to the public.
-
-## TODO
-
-- Add email testing.
-- Allow email templates.
-- Create Logger.

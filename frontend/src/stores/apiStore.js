@@ -5,7 +5,7 @@ import { ref, watch } from 'vue';
 
 const STORE_ID = 'puudle-4903947820978';
 const DEV_BACKEND_PORT = process.env.BACKEND_PORT || '8080';
-const URL_API = process.env.DEV ? `http://localhost:${DEV_BACKEND_PORT}/api/v0` : '/api/v0';
+const URL_API = process.env.DEV ? `http://localhost:${DEV_BACKEND_PORT}/api/v1` : '/api/v1';
 
 let POLL_INTERVAL_MS;
 let DELAYED_POLL_MS;
