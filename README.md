@@ -64,7 +64,7 @@ There's two `node.js` installations:
 
 ### Prerequisites
 
-- `node.js` version >= 16
+- `node.js` version >= 15
 - Email account with SMTP access
 
 That's it. Nothing else.
@@ -140,13 +140,11 @@ recommended for local development.
 
 | | |
 |---|---|
-| EMAIL_RECIPIENT | The address to send notifications to |
-| EMAIL_REPLY_TO | |
-| SMTP_SERVER | |
-| SMTP_PORT | |
-| SMTP_PROTOCOL | |
-| SMTP_USERNAME | |
-| SMTP_PASSWORD | |
+| EMAIL_FROM | The address to send notifications to |
+| EMAIL_TO | EMail recipent |
+| EMAIL_SUBJECT | EMail subject |
+| EMAIL_TEXT | Plain EMail text. All `\n` occurances are replaced by line feeds. |
+| EMAIL_SMTP_URL | SMTP URL as described at https://nodemailer.com/smtp/ |
 
 ### Local staging
 
@@ -183,11 +181,10 @@ or just `node backend/index.js.
 
 ## TODO
 
-- Implement change watcher throttling.
 - Implement change watcher details extraction (added, deleted, modified etc.)
 - Implement backend i18n (or email subject/body settings)
-- Implement Mailer.
 - Document i18n.
 - Persist language selection.
 - Persist last used userName.
 - Suggest userNames.
+- Allow email templates
