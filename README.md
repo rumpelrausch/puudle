@@ -79,6 +79,10 @@ That's it. Nothing else.
 The dev server will reload on source code changes.<br>
 Listens (by default) on port 8081.
 
+#### Check mailer configuration
+
+`npm run send-test-mail` tries to send an email using the configured credentials.
+
 ### Frontend
 
 1. Open any shell inside the project root folder.
