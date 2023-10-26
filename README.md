@@ -182,10 +182,20 @@ Pack and copy these files and directories to your `node.js` hosting platform:
 Then run `npm i` and configure the starting point as `npm run start`
 or just `node backend/index.js.
 
+## User data persistence
+
+The frontend application uses these localStorage values:
+| | |
+|---|---|
+| locale | Manually set language |
+
+This may or may not be a GDPR issue. There's no imprint either, so
+you'd probably not want to advertise your installation to the public.
+
 ## TODO
 
 - Document i18n.
-- Persist language selection.
 - Persist last used userName.
 - Suggest userNames.
-- Allow email templates
+- Allow email templates.
+- Create Logger.

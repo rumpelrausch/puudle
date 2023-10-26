@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import { date, useQuasar } from 'quasar';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
+const STORE_ID = 'puudle-4903947820978';
 const URL_API = process.env.DEV ? 'http://localhost:8080/api/v0' : '/api/v0';
 
 let POLL_INTERVAL_MS;
@@ -46,17 +47,41 @@ async function poll(force = false) {
   return response.data.sort((a, b) => a.date > b.date ? 1 : -1);
 }
 
+function getLocalSettings() {
+  let localSettings;
+  try {
+    localSettings = JSON.parse(localStorage.getItem(STORE_ID));
+  } catch (error) {
+  }
+  if (!localSettings) {
+    localSettings = {
+      locale: null
+    };
+  }
+  return localSettings;
+}
+
 export const apiStore = () => {
-  const innerStore = defineStore('puudle', () => {
+  const innerStore = defineStore(STORE_ID, () => {
     const env = useQuasar().config.customEnv;
     POLL_INTERVAL_MS = env.POLL_INTERVAL_MS || 2000;
     DELAYED_POLL_MS = env.DELAYED_POLL_MS || 15000;
     GET_ONLY_CURRENT_ENTRIES = !!env.GET_ONLY_CURRENT_ENTRIES;
 
+    const entries = ref([]);
+    const entriesStamp = ref([0]);
+    const currentErrorMessage = ref('');
+    const userSettings = ref(getLocalSettings());
+
+    watch(userSettings, () => {
+      localStorage.setItem(STORE_ID, JSON.stringify(userSettings.value));
+    }, { deep: true });
+
     return {
-      entries: ref([]),
-      entriesStamp: ref([0]),
-      currentErrorMessage: ref(''),
+      entries,
+      entriesStamp,
+      currentErrorMessage,
+      userSettings,
 
       getHijackFilter() {
         return !duringPoll;
