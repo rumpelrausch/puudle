@@ -8,6 +8,7 @@ export default {
   inDays: 'in %s days',
   daysAgo: '%s days ago',
   userName: 'Name',
+  tabHint: '(accept with TAB)',
   subscriptionStates: {
     suggested: 'suggested',
     confirmed: 'confirmed',

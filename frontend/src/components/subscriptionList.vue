@@ -32,9 +32,10 @@
     <q-form ref="newSubscriptionForm" @submit="addSubscription">
       <q-card class="row content-stretch items-center rounded-borders" bordered flat>
         <div class="col-8">
-          <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm q-pr-xl" lazy-rules
-            :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]" :shadow-text="newSubscription.userName === '' ? store.userSettings?.lastUsedUserName : ''"
-            @keydown="keyDown" @blur="resetValidation" borderless dense stack-label hide-bottom-space />
+          <q-input :label="userNameFieldTitle" v-model="newSubscription.userName" class="q-pl-sm q-pr-xl" lazy-rules
+            :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]" :shadow-text="userNameShadowText"
+            @focus="newSubscription.hasFocus = true" @keydown="keyDown"
+            @blur="resetValidation(); newSubscription.hasFocus = false" borderless dense stack-label hide-bottom-space />
         </div>
         <div class="col-grow non-selectable stateselect" dense>
           <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense hide-dropdown-icon
@@ -126,15 +127,14 @@ export default {
           icon: 'expand_more',
           color: 'secondary'
         },
-        comment: ''
+        comment: '',
+        hasFocus: false
       };
       resetValidation();
     }
 
     function resetValidation() {
-      if (newSubscriptionForm.value) {
-        newSubscriptionForm.value.resetValidation();
-      }
+      newSubscriptionForm.value?.resetValidation();
     }
 
     async function updateSubscription(userNameBefore, subscription) {
@@ -212,6 +212,16 @@ export default {
       AUTO_SAVE_MILLISECONDS,
       errorMessage,
       get nameTooShort() { return t('minCharacters').replace('%s', MIN_USERNAME_LENGTH); },
+      get userNameFieldTitle() {
+        let title = t('userName');
+        if (newSubscription.value.hasFocus && this.userNameShadowText !== '') {
+          title += ' ' + t('tabHint');
+        }
+        return title;
+      },
+      get userNameShadowText() {
+        return newSubscription.value.userName === '' ? store.userSettings?.lastUsedUserName : '';
+      },
       entryId: props.entry._id,
       subscriptions,
       subscriptionStates,
