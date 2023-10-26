@@ -80,9 +80,9 @@ Listens (by default) on port 8081.
 
 ### Frontend
 
-1. Open any shell inside the subfolder `frontend`.
-2. Run `npm ci` (or `npm i` if you want to update dependencies).
-3. Start the dev server: `npm run dev`.
+1. Open any shell inside the project root folder.
+2. Run `npm run frontend-install` (or `npm i` if you want to update dependencies).
+3. Start the dev server: `npm run frontend-dev`.
 
 The dev server will reload on source code changes.<br>
 Listens (by default) on port 8081.
@@ -90,6 +90,8 @@ Listens (by default) on port 8081.
 Open the frontend with your favorite browser.
 With the default frontend dev port 8081 the URL is:
 http://localhost:8081/
+
+The frontend can be re-built from the root folder via `npm run build-frontend`.
 
 ## Deployment
 
@@ -114,6 +116,7 @@ contain any credentials**.
 
 `.env.customize` settings are baked into the frontend application
 build without any protection.
+Changes relevant to production need a frontend rebuild.
 
 Credentials **may** be set inside the file `.env`. This is only
 recommended for local development.
@@ -181,8 +184,6 @@ or just `node backend/index.js.
 
 ## TODO
 
-- Implement change watcher details extraction (added, deleted, modified etc.)
-- Implement backend i18n (or email subject/body settings)
 - Document i18n.
 - Persist language selection.
 - Persist last used userName.

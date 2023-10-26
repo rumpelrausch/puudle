@@ -15,6 +15,9 @@
   },
   "scripts": {
     "prestart": "npm i",
+    "frontend-install": "npm install --prefix frontend",
+    "frontend-build": "npm run build --prefix frontend",
+    "frontend-dev": "npm run dev --prefix frontend",
     "start": "node backend/index.js",
     "dev": "nodemon backend/index.js"
   },
