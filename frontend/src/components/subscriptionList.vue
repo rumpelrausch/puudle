@@ -3,8 +3,8 @@
     <q-card v-for="subscription in subscriptions" :key="subscription.userName" bordered flat
       class="row content-stretch items-center rounded-borders q-mb-xs">
       <div class="col-8 col-grow bg-disabled" :set="subscription.userNameBefore = subscription.userName">
-        <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense square
-          stack-label />
+        <q-input :label="$t('userName')" :model-value="subscription.userName" class="q-pl-sm" borderless disable dense
+          square stack-label />
       </div>
       <div class="col-4 col-grow non-selectable stateselect" dense>
         <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
@@ -25,20 +25,20 @@
           data-debounce="1" class="q-pl-sm" borderless dense stack-label />
       </div>
       <div class="col" dense>
-        <q-btn icon="bi-trash" color="negative" @click="confirmDelete(subscription.userNameBefore)" class="float-right" dense
-          ripple flat />
+        <q-btn icon="bi-trash" color="negative" @click="confirmDelete(subscription.userNameBefore)" class="float-right"
+          dense ripple flat />
       </div>
     </q-card>
     <q-form ref="newSubscriptionForm" @submit="addSubscription">
       <q-card class="row content-stretch items-center rounded-borders" bordered flat>
         <div class="col-8">
           <q-input :label="$t('userName')" v-model="newSubscription.userName" class="q-pl-sm q-pr-xl" lazy-rules
-            :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]"
-            @blur="resetValidation" borderless dense stack-label hide-bottom-space />
+            :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]" :shadow-text="newSubscription.userName === '' ? store.userSettings?.lastUsedUserName : ''"
+            @keydown="keyDown" @blur="resetValidation" borderless dense stack-label hide-bottom-space />
         </div>
         <div class="col-grow non-selectable stateselect" dense>
           <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense hide-dropdown-icon
-            lazy-rules :rules="[val => val && val.label && val.label.length > 0 || $t('pleaseChoose') ]"
+            lazy-rules :rules="[val => val && val.label && val.label.length > 0 || $t('pleaseChoose')]"
             standout="bg-primary text-white" @focus="store.suspendUpdate">
             <template v-slot:selected>
               <q-avatar size="sm" :color="newSubscription.state.color" text-color="white"
@@ -68,19 +68,22 @@
 .stateselect {
   min-width: 12em !important;
 }
+
 div {
   user-select: none !important;
 }
 </style>
 
 <script>
-import { useQuasar } from 'quasar';
+import { useQuasar, event } from 'quasar';
 import { ref, watch, toRaw } from 'vue';
 import { apiStore } from 'stores/apiStore';
 import { useI18n } from 'vue-i18n';
 
 const MIN_USERNAME_LENGTH = 2;
 const AUTO_SAVE_MILLISECONDS = 1500;
+
+const { stopAndPrevent } = event;
 
 export default {
   props: {
@@ -149,6 +152,7 @@ export default {
         .then((entry) => {
           subscriptions.value = entry.subscriptions;
           resetNewSubscription();
+          store.userSettings.lastUsedUserName = subscription.userName;
         })
         .catch(error => {
           errorMessage.value = tm(error.message);
@@ -168,6 +172,13 @@ export default {
         ok: t('ok'),
         focus: 'cancel'
       }).onOk(() => deleteSubscription(userName));
+    }
+
+    function keyDown(domEvent) {
+      if (domEvent.keyCode === 9 && store.userSettings?.lastUsedUserName) {
+        stopAndPrevent(domEvent);
+        newSubscription.value.userName = store.userSettings?.lastUsedUserName;
+      }
     }
 
     watch(locale, () => {
@@ -210,7 +221,8 @@ export default {
       addSubscription,
       confirmDelete,
       resetNewSubscription,
-      resetValidation
+      resetValidation,
+      keyDown
     };
   }
 };

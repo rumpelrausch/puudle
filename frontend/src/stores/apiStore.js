@@ -56,7 +56,8 @@ function getLocalSettings() {
   }
   if (!localSettings) {
     localSettings = {
-      locale: null
+      locale: null,
+      lastUsedUserName: ''
     };
   }
   return localSettings;

@@ -195,7 +195,5 @@ you'd probably not want to advertise your installation to the public.
 ## TODO
 
 - Document i18n.
-- Persist last used userName.
-- Suggest userNames.
 - Allow email templates.
 - Create Logger.
