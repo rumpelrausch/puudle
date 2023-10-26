@@ -3,6 +3,10 @@
 Organize events and appointments for small, trusted groups.<br>
 Complete with backend (Web service, API, data storage) and web frontend.
 
+It's a bit like `dudle`, `nuudel`, `kulibri`, `bitpoll` et al, but limited
+to really small groups. Comes with an exceptionally small storage footprint,
+optimized for lowest hosting costs.
+
 Runs with almost any `node.js` hosting environment.
 
 ## Application features
@@ -14,6 +18,7 @@ Runs with almost any `node.js` hosting environment.
   - Create upcoming events.
   - Subscribe to events.
   - Use different levels of subscription.
+- Frontend is available in multiple languages.
 - Sends email notifications on content changes.<br>
   Emails will be sent to a single address
   (use an email group to reach users).
@@ -60,6 +65,7 @@ There's two `node.js` installations:
 ### Prerequisites
 
 - `node.js` version >= 16
+- Email account with SMTP access
 
 That's it. Nothing else.
 
@@ -69,9 +75,8 @@ That's it. Nothing else.
 2. Run `npm ci` (or `npm i` if you want to update dependencies).
 3. Start the dev server: `npm run dev`.
 
-The dev server will reload on source code changes.
-
-Listens (by default) on port 8080.
+The dev server will reload on source code changes.<br>
+Listens (by default) on port 8081.
 
 ### Frontend
 
@@ -128,6 +133,7 @@ recommended for local development.
 | GET_ONLY_CURRENT_ENTRIES | Only shows event entries starting from today |
 | DB_PERSIST_DAYS | Entries are deleted if older |
 | ENTRY_DELETION_ALLOWED_SECONDS | How long a new entry is allowed to be deleted |
+| CHANGE_WATCHER_INTERVAL_SECONDS | How often the watcher shall look for changes |
 
 #### Credentials
 (via environment variables or from the `.env` file)
@@ -155,6 +161,16 @@ http://localhost:8080/
 
 ### Server deployment
 
+#### Automatic packing
+
+`npm pack` creates an npm package archive.
+
+Some hosters may be able to simply run from that archive; Otherwise
+the contents of the "package" folder have to be copied to the hosting
+root.
+
+#### Manual packing
+
 Pack and copy these files and directories to your `node.js` hosting platform:
 
 - package.json
@@ -172,4 +188,9 @@ or just `node backend/index.js.
 - Implement change watcher details extraction (added, deleted, modified etc.)
 - Implement backend i18n (or email subject/body settings)
 - Implement Mailer.
-- document i18n.
+- Document i18n.
+- Persist language selection.
+- Persist last used userName.
+- Suggest userNames.
+- pack with npm (and document)
+- correct installation (npm ci requires identical platform...)

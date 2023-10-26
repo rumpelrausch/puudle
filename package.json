@@ -2,7 +2,7 @@
   "name": "puudle-events-api",
   "version": "0.0.1",
   "description": "Puudle...",
-  "main": "index.js",
+  "main": "backend/index.js",
   "scripts": {
     "prestart": "npm ci",
     "start": "node backend/index.js",
@@ -26,5 +26,10 @@
     "fast-glob": "^3.3.1",
     "nedb-core": "^3.0.6",
     "serve-static": "^1.15.0"
-  }
+  },
+  "files": [
+    "backend/**",
+    "dist/**",
+    "package.lock"
+  ]
 }
