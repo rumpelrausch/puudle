@@ -93,6 +93,15 @@ http://localhost:8081/
 
 The frontend can be re-built from the root folder via `npm run build-frontend`.
 
+### i18n
+
+Frontend translation is performed by `vue-i18n`.
+The corresponding locale definitions are located at
+`~/frontend/src/i18n`, each in their own locale folder.
+
+Adding a new translation needs registration in<br>
+`~/frontend/src/i18n/index.js`.
+
 ## Deployment
 
 ### Provisioning
@@ -184,10 +193,13 @@ or just `node backend/index.js.
 
 ## User data persistence
 
-The frontend application uses these localStorage values:
+The frontend application uses localStorage to persist user settings.
+Inside the key starting with 'puudle-' these JSON encoded values are used:
+
 | | |
 |---|---|
-| locale | Manually set language |
+| locale | Manually set language (null ) |
+| lastUsedUserName | Will be suggested when adding subscriptions. |
 
 This may or may not be a GDPR issue. There's no imprint either, so
 you'd probably not want to advertise your installation to the public.
