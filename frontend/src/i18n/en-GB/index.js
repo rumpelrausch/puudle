@@ -1,7 +1,6 @@
 export default {
   slogan: 'The appointment planner',
-  // dateFormatPretty: 'dddd, MMM D YYYY HH:mm', // american
-  dateFormatPretty: 'dddd, D MMM YYYY HH:mm', // british
+  dateFormatPretty: 'dddd, D MMM YYYY HH:mm',
   yesterday: 'yesterday',
   today: 'today',
   tomorrow: 'tomorrow',
