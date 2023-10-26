@@ -73,7 +73,8 @@ That's it. Nothing else.
 
 1. Open any shell inside the project root folder.
 2. Run `npm ci` (or `npm i` if you want to update dependencies).
-3. Start the dev server: `npm run dev`.
+3. Configure credentials in `.env` file.
+4. Start the dev server: `npm run dev`.
 
 The dev server will reload on source code changes.<br>
 Listens (by default) on port 8081.
@@ -147,8 +148,10 @@ recommended for local development.
 | ENTRY_DELETION_ALLOWED_SECONDS | How long a new entry is allowed to be deleted |
 | CHANGE_WATCHER_INTERVAL_SECONDS | How often the watcher shall look for changes |
 
-#### Credentials
+#### Backend Credentials
 (via environment variables or from the `.env` file)
+
+These settings are **obligatory**.
 
 | | |
 |---|---|
@@ -191,6 +194,11 @@ Pack and copy these files and directories to your `node.js` hosting platform:
 Then run `npm i` and configure the starting point as `npm run start`
 or just `node backend/index.js.
 
+#### Prod credentials
+
+Prior to application start, configure the obligatory credentials (as mentioned above).<br>
+Either set environment variables (best practise) or supply a `.env` file.
+
 ## User data persistence
 
 The frontend application uses localStorage to persist user settings.
@@ -206,5 +214,6 @@ you'd probably not want to advertise your installation to the public.
 
 ## TODO
 
+- Add email testing.
 - Allow email templates.
 - Create Logger.
