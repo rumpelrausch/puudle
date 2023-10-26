@@ -4,7 +4,8 @@ import { date, useQuasar } from 'quasar';
 import { ref, watch } from 'vue';
 
 const STORE_ID = 'puudle-4903947820978';
-const URL_API = process.env.DEV ? 'http://localhost:8080/api/v0' : '/api/v0';
+const DEV_BACKEND_PORT = process.env.BACKEND_PORT || '8080';
+const URL_API = process.env.DEV ? `http://localhost:${DEV_BACKEND_PORT}/api/v0` : '/api/v0';
 
 let POLL_INTERVAL_MS;
 let DELAYED_POLL_MS;
