@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import { date, useQuasar } from 'quasar';
+import { ref } from 'vue';
 
 const URL_API = process.env.DEV ? 'http://localhost:8080/api/v0' : '/api/v0';
 
@@ -46,21 +47,17 @@ async function poll(force = false) {
 }
 
 export const apiStore = () => {
-  const innerStore = defineStore('counter', {
-    state: () => {
-      const env = useQuasar().config.customEnv;
-      POLL_INTERVAL_MS = env.POLL_INTERVAL_MS || 2000;
-      DELAYED_POLL_MS = env.DELAYED_POLL_MS || 15000;
-      GET_ONLY_CURRENT_ENTRIES = !!env.GET_ONLY_CURRENT_ENTRIES;
+  const innerStore = defineStore('puudle', () => {
+    const env = useQuasar().config.customEnv;
+    POLL_INTERVAL_MS = env.POLL_INTERVAL_MS || 2000;
+    DELAYED_POLL_MS = env.DELAYED_POLL_MS || 15000;
+    GET_ONLY_CURRENT_ENTRIES = !!env.GET_ONLY_CURRENT_ENTRIES;
 
-      return {
-        entries: [],
-        entriesStamp: [0],
-        currentErrorMessage: ''
-      };
-    },
+    return {
+      entries: ref([]),
+      entriesStamp: ref([0]),
+      currentErrorMessage: ref(''),
 
-    actions: {
       getHijackFilter() {
         return !duringPoll;
       },
@@ -160,7 +157,7 @@ export const apiStore = () => {
         await this.fetchEntries(true);
         return this.getEntryById(entryId);
       }
-    }
+    };
   });
 
   const store = innerStore();
