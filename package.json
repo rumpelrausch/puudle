@@ -1,16 +1,23 @@
 {
-  "name": "puudle-events-api",
-  "version": "0.0.1",
-  "description": "Puudle...",
+  "name": "puudle",
+  "version": "0.1.0",
+  "description": "Appointment management for small groups",
+  "keywords": [
+    "dudle",
+    "nuudel",
+    "kulibri",
+    "bitpoll"
+  ],
   "main": "backend/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:rumpelrausch/puudle.git"
+  },
   "scripts": {
-    "prestart": "npm ci",
+    "prestart": "npm i",
     "start": "node backend/index.js",
     "dev": "nodemon backend/index.js"
   },
-  "keywords": [
-    "swagger"
-  ],
   "license": "Unlicense",
   "private": true,
   "devDependencies": {
@@ -30,6 +37,6 @@
   "files": [
     "backend/**",
     "dist/**",
-    "package.lock"
+    ".env.customize"
   ]
 }

@@ -174,12 +174,11 @@ root.
 Pack and copy these files and directories to your `node.js` hosting platform:
 
 - package.json
-- package-lock.json
 - .env.customize
 - backend/. (whole folder)
 - dist/. (whole folder)
 
-Then run `npm ci` and configure the starting point as `npm run start`
+Then run `npm i` and configure the starting point as `npm run start`
 or just `node backend/index.js.
 
 ## TODO
@@ -192,5 +191,3 @@ or just `node backend/index.js.
 - Persist language selection.
 - Persist last used userName.
 - Suggest userNames.
-- pack with npm (and document)
-- correct installation (npm ci requires identical platform...)
