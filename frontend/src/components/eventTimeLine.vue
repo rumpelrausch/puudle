@@ -8,10 +8,10 @@
             {{ entry.entryName }}
           </div>
         </template>
-        <div :set="parsedDate = getParsedDate(entry.date)">
+        <div :set="parsedDate = getParsedDate(entry.date)" class="q-mt-lg">
           <div class="text-subtitle2 text-primary">
             {{ parsedDate.prettyDate }}
-            <q-chip>
+            <q-chip text-color="primary" outline size="sm" dense class="q-ml-xs q-px-sm">
               {{ parsedDate.dayDiffString }}
             </q-chip>
             <q-btn icon="bi-trash" color="negative" v-if="isAdmin || entry.secondsOld <= ENTRY_DELETION_ALLOWED_SECONDS"
@@ -23,7 +23,7 @@
             <q-icon name="bi-person" v-if="entry.numOfConfirmed === 1" />
             <q-icon name="bi-people" v-if="entry.numOfConfirmed > 1" />
           </q-badge>
-          <div class="non-selectable">
+          <div class="non-selectable q-mt-sm">
             <subscriptionList :entry="entry">
             </subscriptionList>
           </div>

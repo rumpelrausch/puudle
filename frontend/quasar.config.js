@@ -52,7 +52,7 @@ module.exports = configure((/* ctx */) => ({
         back: '#eceff1',
         primary: '#607d8b',
         secondary: '#90a4ae',
-        accent: '#0097a7',
+        accent: '#455a64',
         disabled: '#fafafa',
 
         dark: '#333333',

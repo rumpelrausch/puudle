@@ -29,12 +29,14 @@
           dense ripple flat />
       </div>
     </q-card>
-    <q-form ref="newSubscriptionForm" @submit="addSubscription">
+    <q-btn icon="bi-plus-square" color="positive" v-if="!newSubscription.visible" @click="newSubscription.visible = true"
+      dense ripple flat />
+    <q-form ref="newSubscriptionForm" @submit="addSubscription" v-if="newSubscription.visible">
       <q-card class="row content-stretch items-center rounded-borders" bordered flat>
         <div class="col-8">
           <q-input :label="userNameFieldTitle" v-model="newSubscription.userName" class="q-pl-sm q-pr-xl" lazy-rules
             :rules="[val => val && val.length >= MIN_USERNAME_LENGTH || nameTooShort]" :shadow-text="userNameShadowText"
-            @focus="newSubscription.hasFocus = true" @keydown="keyDown"
+            @focus="newSubscription.hasFocus = true" @keydown="keyDown" v-touch-hold.mouse="setDefaultUser"
             @blur="resetValidation(); newSubscription.hasFocus = false" borderless dense stack-label hide-bottom-space />
         </div>
         <div class="col-grow non-selectable stateselect" dense>
@@ -55,7 +57,9 @@
             @focus="store.suspendUpdate" />
         </div>
         <div class="col" dense>
-          <q-btn type="submit" icon="bi-plus-square" color="positive" class="float-right" dense ripple flat />
+          <q-btn type="submit" icon="bi-floppy" color="positive" class="float-right" dense ripple flat />
+          <q-btn icon="bi-x-square" color="negative" class="float-right" @click="newSubscription.visible = false" dense
+            ripple flat />
         </div>
         <q-banner v-if="errorMessage.length > 0" class="bg-negative text-white">
           {{ errorMessage }}
@@ -121,6 +125,7 @@ export default {
 
     function resetNewSubscription() {
       newSubscription.value = {
+        visible: false,
         userName: '',
         state: {
           label: '',
@@ -174,10 +179,19 @@ export default {
       }).onOk(() => deleteSubscription(userName));
     }
 
-    function keyDown(domEvent) {
-      if (domEvent.keyCode === 9 && store.userSettings?.lastUsedUserName) {
-        stopAndPrevent(domEvent);
+    function setDefaultUser() {
+      if (newSubscription.value.userName.length === 0) {
         newSubscription.value.userName = store.userSettings?.lastUsedUserName;
+      }
+    }
+
+    function keyDown(domEvent) {
+      if (
+        domEvent.keyCode === 9 &&
+        store.userSettings?.lastUsedUserName
+      ) {
+        stopAndPrevent(domEvent);
+        setDefaultUser();
       }
     }
 
@@ -215,13 +229,14 @@ export default {
       get userNameFieldTitle() {
         let title = t('userName');
         if (newSubscription.value.hasFocus && this.userNameShadowText !== '') {
-          title += ' ' + t('tabHint');
+          title += '\xa0\xa0\xa0' + t('tabHint');
         }
         return title;
       },
       get userNameShadowText() {
         return newSubscription.value.userName === '' ? store.userSettings?.lastUsedUserName : '';
       },
+      setDefaultUser,
       entryId: props.entry._id,
       subscriptions,
       subscriptionStates,

@@ -7,7 +7,7 @@ export default {
   inDays: 'in %s Tagen',
   daysAgo: 'vor %s Tagen',
   userName: 'Name',
-  tabHint: '(mit TAB übernehmen)',
+  tabHint: '(mit TAB oder Festhalten übernehmen)',
   subscriptionStates: {
     suggested: 'vorgeschlagen',
     confirmed: 'zugesagt',
@@ -35,7 +35,7 @@ export default {
   },
   eventSuggestions: [
     'Bouldern: FLASHH',
-    'Klettern: DAV',
+    'Klettern (mit Seil): DAV Kletterzentrum',
     'Treffen: '
   ],
   errorMessages: {
