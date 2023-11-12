@@ -9,6 +9,7 @@
       <div class="col-4 col-grow non-selectable stateselect" dense>
         <q-select v-model="subscription.state" :options="subscriptionStates" map-options dense
           standout="bg-primary text-white" hide-dropdown-icon
+          :behavior="$q.platform.is.ios === true ? 'dialog' : 'menu'"
           @update:model-value="updateSubscription(subscription.userNameBefore, subscription)"
           @focus="store.suspendUpdate">
           <template v-slot:selected-item="scope">
@@ -42,6 +43,7 @@
         <div class="col-grow non-selectable stateselect" dense>
           <q-select :options="subscriptionStates" v-model="newSubscription.state" map-options dense hide-dropdown-icon
             lazy-rules :rules="[val => val && val.label && val.label.length > 0 || $t('pleaseChoose')]"
+            :behavior="$q.platform.is.ios === true ? 'dialog' : 'menu'"
             standout="bg-primary text-white" @focus="store.suspendUpdate">
             <template v-slot:selected>
               <q-avatar size="sm" :color="newSubscription.state.color" text-color="white"
@@ -56,10 +58,10 @@
           <q-input v-model="newSubscription.comment" :label="$t('comment')" class="q-pl-sm" borderless dense stack-label
             @focus="store.suspendUpdate" />
         </div>
-        <div class="col" dense>
-          <q-btn type="submit" icon="bi-floppy" color="positive" class="float-right" dense ripple flat />
-          <q-btn icon="bi-x-square" color="negative" class="float-right" @click="newSubscription.visible = false" dense
+        <div class="col float-right" style="display: flex; justify-content: right;" dense>
+          <q-btn icon="bi-x-square" color="negative" @click="resetNewSubscription" dense
             ripple flat />
+          <q-btn type="submit" icon="bi-floppy" color="positive" class="q-ml-xs" dense ripple flat />
         </div>
         <q-banner v-if="errorMessage.length > 0" class="bg-negative text-white">
           {{ errorMessage }}
