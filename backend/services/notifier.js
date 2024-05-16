@@ -6,6 +6,7 @@ async function notify(verbose = false) {
   const info = await transport.sendMail({
     from: process.env.EMAIL_FROM,
     to: process.env.EMAIL_TO,
+    replyTo: process.env.REPLY_TO,
     subject: process.env.EMAIL_SUBJECT,
     text: mailBodyText
   }).catch((error) => {
